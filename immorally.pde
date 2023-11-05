@@ -12,8 +12,10 @@ float noiseMapSeed = 1;
 
 PFont font;
 
+float lastFrameMillis;
 float deltaTime;
-float deltaFactor = 0.1;
+float deltaFactor = 0.1;//0.1;
+float delta;
 
 DeltaPanel deltaPanel = new DeltaPanel(0);
 
@@ -118,13 +120,14 @@ void mousePressed() {
         t.checkpoint = c;
         cpm.checkpoints.add(c);
       }
-    } 
+    }
   }
 }
 
 
 public void loadNextTrack() {
   
+  cpm = new CheckpointManager();
   trackIndex++;
   if( trackIndex >= trackFiles.size() ) trackIndex = 0;
   loadTrack(trackIndex);

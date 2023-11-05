@@ -13,6 +13,9 @@ public class CheckpointManager {
   int validLapCount = 0;
   
   
+ 
+  
+  
   public String getMedianTime() {
     
     long totalSeconds = medianTime / 1000;
@@ -149,8 +152,6 @@ public class CheckpointManager {
   
   
   public void drawCheckpoints() {
-    
-    
     
     for( Checkpoint cp : checkpoints ) {
       cp.drawCheckpoint();

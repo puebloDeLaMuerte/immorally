@@ -100,7 +100,7 @@ public class Car {
 
   public float getSpeed() {
     
-    float delta = deltaTime * deltaFactor;
+    //float delta = deltaTime * deltaFactor;
     
     return lastMove.mag()/delta;
   }
@@ -108,21 +108,30 @@ public class Car {
 
   public void TakeInput( float accelerationInput, float breakingInput, float steeringInput ) {
 
-    float delta = deltaTime * deltaFactor;
+    //float delta = deltaTime * deltaFactor;
+
+    //print("input: " + frameCount );
+
+    steeringInput *= delta;
+    //accelerationInput *= delta;
+    //breakingInput *= delta;
 
     if ( steeringInput == 0f ) {
-      steering -= ( 0.1 * steering * delta );// 0.99 * delta;
+      steering -= ( 0.1 * steering );// 0.99 * delta;
     } else if ( abs(steering) < maxSteering ) {
-      steering = steering + (steeringInput * steeringSensibility * delta);
+      steering += (steeringInput * steeringSensibility);
+    } else {
+      if( steering < 0 ) steering = maxSteering*-1;
+      else steering = maxSteering;
     }
 
     if ( accelerationInput == 0 ) {
-      acceleration -= ( 0.1 * acceleration * delta);
+      acceleration -= ( 0.1 * acceleration);
     } else acceleration += enginePower * delta;
     if ( acceleration > maxAcceleration ) acceleration = maxAcceleration;
 
     if ( breakingInput == 0 ) {
-      breaking -= ( 0.1 * breaking * delta ) ;
+      breaking -= ( 0.1 * breaking ) ;
     } else if ( breaking < maxBreaking ) breaking += breakPower * delta;
     if ( breaking > maxBreaking ) breaking = maxBreaking;
 
@@ -132,9 +141,9 @@ public class Car {
 
   public void updatePhysics() {
 
-    float delta = deltaTime * deltaFactor;
+    //float delta = deltaTime * deltaFactor;
 
-    /* if( lastMove.mag() > 0.4 ) */    rotation += steering * delta;
+    /* if( lastMove.mag() > 0.4 ) */    rotation += steering;
     PVector thisRotation = PVector.fromAngle(rotation);
 
     //currentDirection = atan2(lastMove.x,lastMove.y);
@@ -157,12 +166,12 @@ public class Car {
     
     PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);
 
-    PVector force = PVector.sub( PVector.add( lastMove, demand ), lastMove );
+    PVector force = PVector.sub( PVector.add( lastMove, demand ), lastMove ); // this seems to be bullshit - i think this equates to force = demand.
     float forceMag = force.mag();
-    skidAmount = forceMag * 10;
+    skidAmount = forceMag * delta;
     
     
-    float slideFactor = 1-log( (forceMag*8)+1) ;
+    float slideFactor = (1*delta)-log( (forceMag*(8*delta))+(1*delta)) ;
     maxGripExceeded = true;
     
     
@@ -170,7 +179,7 @@ public class Car {
     //println( forceMag );
     
     //slideFactor = 1-((thisSteering.mag())*0.04);  // works but is not logically right
-    slideFactor = thisSteering.mag() * 3.4;
+    slideFactor = thisSteering.mag() * (3.4 * delta);
     
     //slideFactor = 0.8+forceMag;
     
@@ -193,10 +202,13 @@ public class Car {
     
     //println(delta);
     
-    PVector thisFriction = new PVector( -newDir.x, -newDir.y ).mult(carFriction/delta).mult((0.0015* delta)+newDir.mag()).mult(delta);
-    newDir.add(thisFriction);
+    ///////// REMOVED FRICTION FOR DEBUGGING
+    //PVector thisFriction = new PVector( -newDir.x, -newDir.y ).mult(carFriction/delta).mult((0.0015* delta)+newDir.mag())/*.mult(delta)*/;
+    //newDir.add(thisFriction);
+    ///////// REMOVED FRICTION FOR DEBUGGING
     
     lastMove = new PVector(newDir.x, newDir.y);
+    //newDir = newDir.mult(delta);
     pos.add(newDir);
     
     

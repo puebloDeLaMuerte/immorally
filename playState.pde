@@ -1,7 +1,9 @@
 public void raceLoop() {
   
-  deltaTime = (1000 / frameRate);
-
+  //deltaTime = (1000 / frameRate);
+  deltaTime = millis() - lastFrameMillis;
+  lastFrameMillis = millis();
+  delta = deltaTime * deltaFactor;
   
   updateSkidLayer();
   
@@ -51,7 +53,10 @@ public void raceLoop() {
   text(cpm.getBestTime(), 230, 100);
   text("median:", 100, 130);
   text(cpm.getMedianTime(), 230, 130);
-
+  
+  text("deltaTime:" + deltaTime, 230, 300);
+  text("delta    :" + delta, 230, 330);
+  
   if ( resetKeyPressed ) {
     car = new Car( width/2, height/2, 0);
     //iptrack = new Track();

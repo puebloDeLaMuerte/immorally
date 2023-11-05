@@ -102,6 +102,7 @@ public class Track {
           }
         }
       }
+      cpm.checkpoints.get(0).contact(car);
     return true;
   }
   
@@ -204,6 +205,8 @@ public class Track {
   
   
   public void checkCarPos(Car car) {
+    
+    
     for(Tile t : tiles) {
             
       if( PGS_ShapePredicates.containsPoint(t.shape,car.pos) ) {

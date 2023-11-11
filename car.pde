@@ -28,7 +28,7 @@ public class Car {
   private float breakPower = 0.018;
   private float maxBreaking = 0.035;
 
-  private float carFriction = 0.001;
+  private float carFriction = 0.01;
 
   private float maxGripTotal = 0.08;
   private boolean maxGripExceeded;
@@ -102,7 +102,7 @@ public class Car {
     
     //float delta = deltaTime * deltaFactor;
     
-    return lastMove.mag()/delta;
+    return 1;//lastMove.mag()/delta;
   }
 
 
@@ -113,104 +113,139 @@ public class Car {
     //print("input: " + frameCount );
 
     steeringInput *= delta;
-    //accelerationInput *= delta;
-    //breakingInput *= delta;
+    accelerationInput *= delta;
+    breakingInput *= delta;
 
     if ( steeringInput == 0f ) {
-      steering -= ( 0.1 * steering );// 0.99 * delta;
+      steering -= ( 0.1 * steering ) * delta;// 0.99 * delta;
     } else if ( abs(steering) < maxSteering ) {
-      steering += (steeringInput * steeringSensibility);
+      steering += (steeringInput * steeringSensibility );
     } else {
       if( steering < 0 ) steering = maxSteering*-1;
       else steering = maxSteering;
     }
 
     if ( accelerationInput == 0 ) {
-      acceleration -= ( 0.1 * acceleration);
-    } else acceleration += enginePower * delta;
+      acceleration -= ( 0.1 * acceleration) * delta;
+    } else acceleration += enginePower * accelerationInput;
     if ( acceleration > maxAcceleration ) acceleration = maxAcceleration;
 
     if ( breakingInput == 0 ) {
-      breaking -= ( 0.1 * breaking ) ;
-    } else if ( breaking < maxBreaking ) breaking += breakPower * delta;
+      breaking -= ( 0.1 * breaking ) * delta;
+    } else if ( breaking < maxBreaking ) breaking += breakPower * breakingInput;
     if ( breaking > maxBreaking ) breaking = maxBreaking;
 
   }
 
 
+  
+
 
   public void updatePhysics() {
 
-    //float delta = deltaTime * deltaFactor;
 
-    /* if( lastMove.mag() > 0.4 ) */    rotation += steering;
+    //println("dt: " + deltaTime );
+
+       
+    rotation += (steering * delta);
+    //rotation += steering;
     PVector thisRotation = PVector.fromAngle(rotation);
 
-    //currentDirection = atan2(lastMove.x,lastMove.y);
-
-    //PVector thisFriction = new PVector( -lastMove.x, -lastMove.y ).mult(carFriction).mult(delta).mult(0.0001+lastMove.mag());
 
     PVector thisAcceleration = new PVector(thisRotation.x, thisRotation.y);
-    thisAcceleration.mult(acceleration * delta);
+    thisAcceleration.mult( acceleration * delta );
+    //thisAcceleration.mult( acceleration );
+    
 
     PVector lastDir = new PVector(lastMove.x,lastMove.y).normalize();
     PVector thisBreaking = new PVector(-lastDir.x, -lastDir.y);
     thisBreaking.mult(breaking * delta);
+    //thisBreaking.mult(breaking);
 
+    
 
     float lastMoveMag = lastMove.mag();
-    PVector steeredDir = new PVector(thisRotation.x, thisRotation.y).setMag(lastMoveMag);
+    PVector steeredDir = new PVector(thisRotation.x, thisRotation.y).setMag(lastMoveMag); 
     PVector thisSteering = PVector.sub(steeredDir, lastMove);
     
-    
-    
-    PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);
+        
+        /*
+        
+    //PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);
 
-    PVector force = PVector.sub( PVector.add( lastMove, demand ), lastMove ); // this seems to be bullshit - i think this equates to force = demand.
+    //PVector force = PVector.sub( PVector.add( lastMove, demand ), lastMove ); // this seems to be bullshit - i think this equates to force = demand.
+    PVector force = demand;
     float forceMag = force.mag();
-    skidAmount = forceMag * delta;
+    skidAmount = forceMag;
     
+    dplott.scale = 40;
+    dplott.setPlot( demand, pos, rotation, color(255,0,0) );
     
-    float slideFactor = (1*delta)-log( (forceMag*(8*delta))+(1*delta)) ;
+    float slideFactor = 0;
+    //float slideFactor = 1-log( (forceMag*(8))+(1)) ;
     maxGripExceeded = true;
     
-    
-    //println(thisSteering.mag());
-    //println( forceMag );
-    
+        
     //slideFactor = 1-((thisSteering.mag())*0.04);  // works but is not logically right
-    slideFactor = thisSteering.mag() * (3.4 * delta);
+    slideFactor += (thisSteering.mag() * 50f);
+    slideFactor += (forceMag * 5f);
     
-    //slideFactor = 0.8+forceMag;
     
+    //slideFactor = constrain(slideFactor,0,0.99);
+    slideFactor = slideFactor / (slideFactor+2f);
     
-    slideFactor = constrain(slideFactor,0,0.99);
-    //println(slideFactor);
+    //println("slide Factor:   " + slideFactor);
     
     //skidAmount += (1-slideFactor) * 10;
-    //slideFactor = 0.99f;
-    demand.add( thisSteering.mult(-1).mult(slideFactor) );
     
+    //demand.add( thisSteering.mult(-1).mult(slideFactor) ); // this is where sliding is added
+    //PVector thisSlide = new PVector(0,0).add( thisSteering.mult(-1).mult(slideFactor) );
+    
+    //öööööööööööööööö PVector thisSlide = new PVector( (lastMove.x * slideFactor) + lastMov  );
+    
+    //demand.add(thisSlide);
     //println(thisBreaking.mag());
     
     //float breakSteerFactor =  1-(thisBreaking.mag()*0.01);
     //demand.add( thisSteering.mult(-1).mult(breakSteerFactor) );
     
+    */
     
-    PVector newDir = PVector.add( lastMove, demand );
+    PVector newDir = new PVector();
+    newDir.add( lastMove );
+    newDir.add( thisAcceleration );
+    newDir.add( thisBreaking );
+    newDir.add( thisSteering );
+    
+    //newDir.add( thisSlide );
+    
+    //dplott.setPlot(  PVector.sub( PVector.add( PVector.mult(newDir, 1-slideFactor), PVector.mult(lastMove,slideFactor)), newDir)  , pos, rotation, color( 255,255,0) );
+    
+    //newDir = PVector.add( PVector.mult(newDir, 1-slideFactor), PVector.mult(lastMove,slideFactor) );
+    
     //if ( newDir.mag() > maxSpeed ) newDir.setMag(maxSpeed);
     
-    //println(delta);
     
-    ///////// REMOVED FRICTION FOR DEBUGGING
-    //PVector thisFriction = new PVector( -newDir.x, -newDir.y ).mult(carFriction/delta).mult((0.0015* delta)+newDir.mag())/*.mult(delta)*/;
+    
+    // old pip style friction calculation
+    //PVector thisFriction = new PVector( -newDir.x, -newDir.y ).mult(carFriction).mult((0.0015)+newDir.mag())/*.mult(delta)*/;
     //newDir.add(thisFriction);
-    ///////// REMOVED FRICTION FOR DEBUGGING
+    // new GPT style friction calculation:
+    PVector frictionForce = new PVector(-newDir.x, -newDir.y);
+    frictionForce.normalize(); // Normalize it to get the direction of friction  
+    frictionForce.mult(carFriction * ( (0.0015) + newDir.mag())); // Apply the friction coefficient and speed-dependent factor
+    frictionForce.mult(delta);
+    newDir.add(frictionForce);
+    
+    // TODO: apply more friction if the cars rotation is not aligned with it's actual direction of travel  
     
     lastMove = new PVector(newDir.x, newDir.y);
-    //newDir = newDir.mult(delta);
-    pos.add(newDir);
     
+    //newDir.mult(delta);
+    PVector scaledNewDir = new PVector( newDir.x * delta, newDir.y * delta );
+    //scaledNewDir = scaledNewDir.mult(delta);
+    pos.add(scaledNewDir);
+    //pos.add( thisSlide );
     
     // EMIT SPARKS MAYBE ??
 

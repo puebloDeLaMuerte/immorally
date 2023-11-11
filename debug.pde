@@ -6,6 +6,12 @@ public void debugPrintFPS(int x, int y ) {
   popStyle();
 }
 
+
+public void debugPrintDeltas() {
+  text("deltaTime:" + deltaTime, 230, 300);
+  text("delta    :" + delta, 230, 330);
+}
+
 void debugDrawCarData(Car car, int inx, int iny) {
   pushStyle();
   rectMode(RADIUS);

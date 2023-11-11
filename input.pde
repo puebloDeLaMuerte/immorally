@@ -1,13 +1,13 @@
-char accelerateKey = 'w';
+char accelerateKey = 'a';
 boolean accelKeyPressed;
 
-char breakKey = 's';
+char breakKey = 'y';
 boolean breakKeyPressed;
 
-char turnLeftKey = 'a';
+char turnLeftKey = ',';
 boolean turnLeftPressed;
 
-char turnRightKey = 'd';
+char turnRightKey = '.';
 boolean turnRightPressed;
 
 char resetKey = 'r';
@@ -52,6 +52,10 @@ void keyPressed(KeyEvent e) {
   if( k == loadTrackKey ) loadNextTrack();
   
   if( k == printDebugInfoKey ) printDebugInfo();
+  
+  if( k == '1' ) frameRate(120);
+  if( k == '2' ) frameRate(60);
+  if( k == '3' ) frameRate(30);
 }
 
 

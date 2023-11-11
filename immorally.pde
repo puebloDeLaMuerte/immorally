@@ -9,6 +9,7 @@ PGraphics trackLayer;
 PGraphics noiseMap;
 float noiseMapSeed = 1;
 
+DPlott dplott;
 
 PFont font;
 
@@ -33,12 +34,15 @@ State gameState = State.INTRO;
 
 void settings() {
   fullScreen(P2D);
+  //pixelDensity(2);
 }
 
 
 void setup() {
   frameRate(120);
   noCursor();
+
+  dplott = new DPlott();
 
   trackFiles = new ArrayList<String>();
   File folder = new File(sketchPath()+"/data/tracks");

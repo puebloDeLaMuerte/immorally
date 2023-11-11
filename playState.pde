@@ -1,9 +1,6 @@
 public void raceLoop() {
   
-  //deltaTime = (1000 / frameRate);
-  deltaTime = millis() - lastFrameMillis;
-  lastFrameMillis = millis();
-  delta = deltaTime * deltaFactor;
+  
   
   updateSkidLayer();
   
@@ -26,6 +23,7 @@ public void raceLoop() {
   
   sparks.drawSparks(g, 200);
   
+  updateDelta();
   calculateInput(car);
   car.updatePhysics();
   
@@ -54,8 +52,7 @@ public void raceLoop() {
   text("median:", 100, 130);
   text(cpm.getMedianTime(), 230, 130);
   
-  text("deltaTime:" + deltaTime, 230, 300);
-  text("delta    :" + delta, 230, 330);
+  
   
   if ( resetKeyPressed ) {
     car = new Car( width/2, height/2, 0);
@@ -67,9 +64,22 @@ public void raceLoop() {
   }
   
   debugPrintFPS(width/2, 100);
+  dplott.draw();
 }
 
 
+
+public void updateDelta() {
+  
+  //deltaTime = (1000 / frameRate);
+  
+  
+  int millis = millis();
+  deltaTime = millis - lastFrameMillis;
+  lastFrameMillis = millis;
+  
+  delta = deltaTime * deltaFactor;
+}
 
 
 

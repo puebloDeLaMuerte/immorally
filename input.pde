@@ -32,7 +32,7 @@ char printDebugInfoKey = 'p';
 
 void keyPressed(KeyEvent e) {
   
-  if( e.isAutoRepeat() ) return;
+  //if( e.isAutoRepeat() ) return;
   
   char k = e.getKey(); //<>//
     
@@ -61,7 +61,7 @@ void keyPressed(KeyEvent e) {
 
 void keyReleased(KeyEvent e) {
   
-  if( e.isAutoRepeat() ) return;
+  //if( e.isAutoRepeat() ) return;
   
   char k = e.getKey();
   

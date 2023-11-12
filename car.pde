@@ -21,14 +21,14 @@ public class Car {
   private float steeringSensibility = 0.002f;
 
   private float acceleration;
-  private float enginePower = 0.007f;
+  private float enginePower = 0.007f;//0.007f;
   private float maxAcceleration = 0.04;
 
   private float breaking;
   private float breakPower = 0.018;
   private float maxBreaking = 0.035;
 
-  private float carFriction = 0.01;
+  private float carFriction = 0.005;
 
   private float maxGripTotal = 0.08;
   private boolean maxGripExceeded;
@@ -102,7 +102,7 @@ public class Car {
     
     //float delta = deltaTime * deltaFactor;
     
-    return 1;//lastMove.mag()/delta;
+    return lastMove.mag();
   }
 
 
@@ -169,17 +169,17 @@ public class Car {
     PVector thisSteering = PVector.sub(steeredDir, lastMove);
     
         
-        /*
         
-    //PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);
+        
+    PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);
 
     //PVector force = PVector.sub( PVector.add( lastMove, demand ), lastMove ); // this seems to be bullshit - i think this equates to force = demand.
-    PVector force = demand;
-    float forceMag = force.mag();
-    skidAmount = forceMag;
+    //PVector force = demand;
+    //float forceMag = force.mag();
+    //skidAmount = forceMag;
     
-    dplott.scale = 40;
-    dplott.setPlot( demand, pos, rotation, color(255,0,0) );
+    //dplott.scale = 40;
+    //dplott.setPlot( demand, pos, rotation, color(255,0,0) );
     
     float slideFactor = 0;
     //float slideFactor = 1-log( (forceMag*(8))+(1)) ;
@@ -188,18 +188,20 @@ public class Car {
         
     //slideFactor = 1-((thisSteering.mag())*0.04);  // works but is not logically right
     slideFactor += (thisSteering.mag() * 50f);
-    slideFactor += (forceMag * 5f);
+    slideFactor += (demand.mag() * 5f);
     
     
     //slideFactor = constrain(slideFactor,0,0.99);
     slideFactor = slideFactor / (slideFactor+2f);
+    
+    skidAmount = slideFactor;
     
     //println("slide Factor:   " + slideFactor);
     
     //skidAmount += (1-slideFactor) * 10;
     
     //demand.add( thisSteering.mult(-1).mult(slideFactor) ); // this is where sliding is added
-    //PVector thisSlide = new PVector(0,0).add( thisSteering.mult(-1).mult(slideFactor) );
+    PVector thisSlide = new PVector( thisSteering.x * -1, thisSteering.y * -1 ).mult(slideFactor);
     
     //öööööööööööööööö PVector thisSlide = new PVector( (lastMove.x * slideFactor) + lastMov  );
     
@@ -209,14 +211,14 @@ public class Car {
     //float breakSteerFactor =  1-(thisBreaking.mag()*0.01);
     //demand.add( thisSteering.mult(-1).mult(breakSteerFactor) );
     
-    */
+    
     
     PVector newDir = new PVector();
     newDir.add( lastMove );
     newDir.add( thisAcceleration );
     newDir.add( thisBreaking );
     newDir.add( thisSteering );
-    
+    newDir.add( thisSlide );
     //newDir.add( thisSlide );
     
     //dplott.setPlot(  PVector.sub( PVector.add( PVector.mult(newDir, 1-slideFactor), PVector.mult(lastMove,slideFactor)), newDir)  , pos, rotation, color( 255,255,0) );
@@ -283,8 +285,9 @@ public class Car {
 
     //println(skidAmount);
     boolean drawSkid;
-    if( skidAmount > 10 ) {
-      skidLayer.fill(0,0,0,skidAmount*0.5f);
+    float skidThreshold = 0.04f;
+    if( skidAmount > skidThreshold * delta ) {
+      skidLayer.fill(0,0,0, (skidAmount-skidThreshold) * 10.5f * delta);
       drawSkid = true;
     } else {
       drawSkid = false;

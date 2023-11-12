@@ -35,12 +35,14 @@ State gameState = State.INTRO;
 void settings() {
   fullScreen(P2D);
   //pixelDensity(2);
+  smooth();
 }
 
 
 void setup() {
   frameRate(120);
   noCursor();
+  
 
   dplott = new DPlott();
 
@@ -57,7 +59,7 @@ void setup() {
   font = createFont("RacelineDemo", deltaPanel.size);
   initAudio();
 
-  skidLayer = createGraphics(width, height);
+  initSkidLayer();
   noiseMap = createGraphics(width/noiseMapSizeFactor, height/noiseMapSizeFactor);
   trackLayer = createGraphics(width,height);
   noiseDetail(5,0.6);
@@ -68,8 +70,14 @@ void setup() {
 }
 
 
+void initSkidLayer() {
+  skidLayer = createGraphics(width, height);
+}
+
 
 void draw() {
+  
+  println("frame");
   
   background(0);
 
@@ -131,6 +139,7 @@ void mousePressed() {
 
 public void loadNextTrack() {
   
+  initSkidLayer();
   cpm = new CheckpointManager();
   trackIndex++;
   if( trackIndex >= trackFiles.size() ) trackIndex = 0;

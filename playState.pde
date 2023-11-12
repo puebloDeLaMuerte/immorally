@@ -71,13 +71,13 @@ public void raceLoop() {
 
 public void updateDelta() {
   
-  //deltaTime = (1000 / frameRate);
+  deltaTime = (1000 / frameRate);
   
-  
+  /*
   int millis = millis();
   deltaTime = millis - lastFrameMillis;
   lastFrameMillis = millis;
-  
+  */
   delta = deltaTime * deltaFactor;
 }
 

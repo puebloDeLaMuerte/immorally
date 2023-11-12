@@ -43,14 +43,24 @@ public void raceLoop() {
 
   //rect(car.worldPosTest.x,car.worldPosTest.y,30,30);
 
-  
+  int gfirst = 70;
+  int gsecond = 100;
 
   textSize(25);
   fill(palette.darkGlow);
-  text("best:", 100, 100);
-  text(cpm.getBestTime(), 230, 100);
-  text("median:", 100, 130);
-  text(cpm.getMedianTime(), 230, 130);
+  text("track:", 50,gfirst);
+  fill(palette.mainColorSecondary);
+  text( track.trackName, 50, gsecond);
+  
+  fill(palette.darkGlow);
+  text("best:", 250, gfirst);
+  fill(palette.mainColorSecondary);
+  text(cpm.getBestTime(), 250, gsecond);
+  
+  fill(palette.darkGlow);
+  text("median:", 450, gfirst);
+  fill(palette.mainColorSecondary);
+  text(cpm.getMedianTime(), 450, gsecond);
   
   
   
@@ -63,7 +73,7 @@ public void raceLoop() {
     playYeah();*/
   }
   
-  debugPrintFPS(width/2, 100);
+  debugPrintFPS(width/2, height-100);
   dplott.draw();
 }
 

@@ -60,14 +60,23 @@ public class Track {
           l++;
           if( lines[l].equals("tile") ) {
             
-            int checkPointNr = -1;
+            int typeNr = 0;
             l++;
             
-            if( lines[l].equals("checkpoint") ) {
+            if( lines[l].equals("type") ) {
               l++;
-              checkPointNr = parseInt(lines[l]);
+              typeNr = parseInt(lines[l]);
+              l++;
             }
-            l++;
+            
+            
+            int typeData = 0;
+            if( lines[l].equals("typeData") ) {
+              l++;
+              typeData = parseInt(lines[l]);
+              l++;
+            }
+            
             PShape s = null;
             if( lines[l].equals("shape") ) { //<>//
               ArrayList<PVector> vecs = new ArrayList<PVector>();
@@ -93,8 +102,8 @@ public class Track {
             }
             if( lines[l].equals( "/shape") ) {
               Tile t = new Tile(s,this);
-              if( checkPointNr != -1 ) {
-                t.checkpoint = new Checkpoint(t,checkPointNr);
+              if( typeNr == 1 ) { // typeNr 1 means Checkpoint
+                t.checkpoint = new Checkpoint(t,typeData);
                 cpm.checkpoints.add(t.checkpoint);
               }
               tiles.add(t);
@@ -102,7 +111,9 @@ public class Track {
           }
         }
       }
+      cpm.sortCheckpoints();
       cpm.checkpoints.get(0).contact(car);
+      
     return true;
   }
   
@@ -110,20 +121,24 @@ public class Track {
   
   public void saveTrack(String trackName) {
     
-    println("saving Track...");
+    println("saving Track: " + trackName);
     ArrayList<String> s = new ArrayList<String>();
     s.add(trackName);
     
     s.add("track");
     for(Tile t : tiles) {
       s.add("tile");
+      s.add("type");
       if( t.checkpoint != null ) {
-        s.add("checkpoint");
+        s.add("1");
+        s.add("typeData");
         s.add(""+t.checkpoint.checkPointNumber);
       } else {
-        s.add("checkpoint");
-        s.add(""+-1);
+        s.add("0");
       }
+      
+      
+      
       s.add("shape");
       
       for(int i = 0; i < t.shape.getVertexCount(); i++) {
@@ -144,7 +159,7 @@ public class Track {
     for(int i = 0; i < sarr.length; i++) {
       sarr[i] = s.get(i);
     }
-    saveStrings( trackName+".track", sarr );
+    saveStrings( "data/tracks/" + trackName+".track", sarr );
   }
   
   

@@ -1,3 +1,8 @@
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 Palette palette = new Palette();
 Track track;
 Car car;
@@ -77,7 +82,7 @@ void initSkidLayer() {
 
 void draw() {
   
-  println("frame");
+  //println("frame");
   
   background(0);
 
@@ -105,7 +110,7 @@ void draw() {
   }
   
 
-  if( setCheckpoints ) {
+  if( setCheckpoints ) { //<>//
     for( Tile t : track.tiles ) {
       t.mouseOver(mouseX,mouseY);
       t.drawMouseOver();
@@ -115,7 +120,15 @@ void draw() {
 
 
 void saveTrackAs() {
-  track.saveTrack("newTrack");
+  
+  String userInput = JOptionPane.showInputDialog(this, "name the track");
+    if (userInput != null) {
+        println("User entered: " + userInput);
+    } else {
+        println("No input was given.");
+    }
+  
+  track.saveTrack(userInput);
 }
 
 

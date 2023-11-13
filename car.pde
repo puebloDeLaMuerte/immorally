@@ -13,7 +13,8 @@ public class Car {
   public PVector tyreFRworldPos = new PVector(0,0);
   public PVector tyreRLworldPos = new PVector(0,0);
   public PVector tyreRRworldPos = new PVector(0,0);
-
+  public ArrayList<PVector> tyreWorldPos;
+  
   private float maxSpeed = 8;
 
   private float steering;
@@ -95,6 +96,12 @@ public class Car {
     rearTyre.vertex(-tireradiusR/2,0);
     rearTyre.endShape();
     rearTyre.disableStyle();
+    
+    tyreWorldPos = new ArrayList<PVector>();
+    tyreWorldPos.add(tyreFLworldPos);
+    tyreWorldPos.add(tyreFRworldPos);
+    tyreWorldPos.add(tyreRLworldPos);
+    tyreWorldPos.add(tyreRRworldPos);
   }
 
 
@@ -264,6 +271,15 @@ public class Car {
   }
 
 
+  public ArrayList<PVector> getTyreWorldPos() {
+    
+    tyreWorldPos.clear();
+    tyreWorldPos.add(tyreFLworldPos);
+    tyreWorldPos.add(tyreFRworldPos);
+    tyreWorldPos.add(tyreRLworldPos);
+    tyreWorldPos.add(tyreRRworldPos);
+    return tyreWorldPos;
+  }
 
 
 
@@ -319,10 +335,10 @@ public class Car {
     line( tyreXrl, tyreYrl, tyreXrr, tyreYrr );
     line( tyreXfl, tyreYfl, tyreXfr, tyreYfr );
     
-    tyreFLworldPos = new PVector(screenX(tyreXfl, tyreYfl),screenY(tyreXfl, tyreYfl ));
-    tyreFLworldPos = new PVector(screenX(tyreXfr, tyreYfr),screenY(tyreXfr, tyreYfr ));
-    tyreFLworldPos = new PVector(screenX(tyreXrl, tyreYrl),screenY(tyreXrl, tyreYrl ));
-    tyreFLworldPos = new PVector(screenX(tyreXrr, tyreYrr),screenY(tyreXrr, tyreYrr ));
+    tyreFLworldPos = new PVector(screenX(tyreXfl, tyreYfl),screenY(tyreXfl, tyreYfl )); //<>//
+    tyreFRworldPos = new PVector(screenX(tyreXfr, tyreYfr),screenY(tyreXfr, tyreYfr ));
+    tyreRLworldPos = new PVector(screenX(tyreXrl, tyreYrl),screenY(tyreXrl, tyreYrl ));
+    tyreRRworldPos = new PVector(screenX(tyreXrr, tyreYrr),screenY(tyreXrr, tyreYrr ));
     
     fill(palette.black);
     stroke(palette.mainColorPrimary);

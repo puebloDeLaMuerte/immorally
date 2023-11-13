@@ -191,7 +191,9 @@ public class Checkpoint {
   Tile tile;
 
   Car car = null;
-
+  
+  int     cooldownMillis = 500;
+  int     lastContactMillis;
   boolean checked;
   boolean secondChecked;
   boolean left;
@@ -211,7 +213,9 @@ public class Checkpoint {
 
 
   public void contact( Car car ) {
-
+    
+    lastContactMillis = millis();
+    
     if ( !checked ) {
       this.car = car;
       checked = true;
@@ -229,6 +233,8 @@ public class Checkpoint {
 
   public void checkForLeft( PShape shape) {
 
+    if( millis() - lastContactMillis < cooldownMillis ) return;
+    
     if ( !PGS_ShapePredicates.containsPoint(shape, car.pos) ) {
       car = null;
       left = true;

@@ -110,7 +110,7 @@ void draw() {
   }
   
 
-  if( setCheckpoints ) { //<>//
+  if( setCheckpoints ) {
     for( Tile t : track.tiles ) {
       t.mouseOver(mouseX,mouseY);
       t.drawMouseOver();

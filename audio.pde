@@ -13,6 +13,7 @@ SoundFile yeah;
 SoundFile boo;
 SoundFile boom;
 SoundFile staticElectric;
+SoundFile disconnect;
 
 void initAudio() {
   
@@ -36,6 +37,7 @@ void initAudio() {
   electric = new SoundFile(this, audioFolder+"155834__felix-blume__electrical-vibration-of-an-electric-transformer-box.wav");
   yeah = new SoundFile(this, audioFolder+"496087__dastudiospr__male-yeah.wav");
   boo = new SoundFile(this, audioFolder+"boo.wav");
+  disconnect = new SoundFile(this, audioFolder+"Disconnect.wav");
   
   lap.amp(0.1);
   ding.amp(1.4);
@@ -69,6 +71,9 @@ void playLap() {
 }
 
 void playDing() {
+  float rate = random(0.9,1.4);
+  //println("rate: " + rate);
+  ding.rate(rate);
   ding.play();
 }
 
@@ -78,20 +83,27 @@ void playBoo() {
 }
 
 
+void playDisconnect() {
+  disconnect.amp(1);
+  disconnect.play();
+}
+
+
 void playEngine( float speed ) {
+  
+  println("carspeed: " + speed);
   
   if( !engine.isPlaying() ) {
     engine.amp(0.34);
     engine.loop();
   }
-  //println("carspeed: " + speed);
   
   speed *= 0.8;
   speed += 0.5;
   
   engine.rate(speed);
-  
-}
+}  
+
 
 void playElectric( float speed ) {
   

@@ -1,6 +1,7 @@
 public class CheckpointManager {
 
   ArrayList<Checkpoint> checkpoints = new ArrayList();
+  ArrayList<Checkpoint> specialCheckpoints = new ArrayList();
 
   ArrayList<Long> allLapTimes = new ArrayList();
   long medianTime = 0;
@@ -88,13 +89,13 @@ public class CheckpointManager {
    for( int i = 0; i < checkpoints.size(); i++ ) {
    if( i == 0 ) {
    checkpoints.get(0).checkForContact(x,y,s);
-   if( checkpoints.get(0).secondChecked && checkpoints.get(0).left ) {//&& checkpoints.get(checkpoints.size()-1).checked ) {
-   newLap(); //<>// //<>//
+   if( checkpoints.get(0).secondChecked && checkpoints.get(0).left ) {//&& checkpoints.get(checkpoints.size()-1).checked ) { //<>//
+   newLap(); //<>//
    }
    }
    else if( checkpoints.get(i-1).checked && !checkpoints.get(i).checked) {
-   checkpoints.get(i).checkForContact(x,y,s);
-   } //<>// //<>//
+   checkpoints.get(i).checkForContact(x,y,s); //<>//
+   } //<>//
    }
    }
    */
@@ -123,8 +124,8 @@ public class CheckpointManager {
       for ( Checkpoint cp : checkpoints ) {
         cp.newLap();
       }
-      return;
-    } //<>// //<>//
+      return; //<>//
+    } //<>//
     validLapCount++;
 
     lastMedianTime = medianTime;
@@ -148,6 +149,9 @@ public class CheckpointManager {
     for ( Checkpoint cp : checkpoints ) {
       cp.newLap();
     }
+    for( Checkpoint scp : specialCheckpoints ) {
+      scp.newLap();
+    }
   }
 
 
@@ -155,6 +159,9 @@ public class CheckpointManager {
 
     for ( Checkpoint cp : checkpoints ) {
       cp.drawCheckpoint();
+    }
+    for( Checkpoint scp : specialCheckpoints ) {
+      scp.drawCheckpoint();
     }
   }
 
@@ -210,7 +217,14 @@ public class Checkpoint {
     println("New Checkpoint: " + number);
   }
 
+  protected int getCheckpointData() {
+    return checkPointNumber;
+  }
+  
 
+  public int getTypeNr() {
+    return 1; //<>//
+  }
 
   public void contact( Car car ) {
     
@@ -221,7 +235,7 @@ public class Checkpoint {
       checked = true;
       left = false;
       checkTime = millis();
-      ding.play();
+      doEffect(car);
     } else {
       if ( left ) {
         secondChecked = true;
@@ -229,6 +243,10 @@ public class Checkpoint {
         //left = false;
       }
     }
+  }
+  
+  protected void doEffect( Car car ) {
+    playDing();
   }
 
   public void checkForLeft( PShape shape) {
@@ -252,7 +270,7 @@ public class Checkpoint {
   }
 
 
-  public void drawCheckpoint() {
+  protected void drawCheckpoint() {
     //text(checkPointNumber,tile.center.x,tile.center.y);
     if ( !checked) {
       strokeWeight(3);
@@ -271,4 +289,55 @@ public class Checkpoint {
     }
     shape(tile.shape);
   }
+}
+
+
+
+
+public class SpecialCheckpointManager {
+  
+  ArrayList<Checkpoint> checkpoints = new ArrayList();
+  
+  public void drawCheckpoints() {
+
+    for ( Checkpoint cp : checkpoints ) {
+      cp.drawCheckpoint();
+    }
+  }
+}
+
+
+
+
+
+public class PowerDownCheckpoint extends Checkpoint { //<>//
+  
+  
+  public PowerDownCheckpoint(Tile t) {
+    
+    super(t, 0);
+    
+    println("New PowerDownCheckpoint");
+  }
+  
+  @Override
+  public int getTypeNr() {
+    return 2; //<>//
+  }
+  
+  @Override
+  protected void doEffect( Car car ) {
+    playDisconnect();
+    car.triggerStatus( new CarStatus( millis(), 1000, StatusType.POWER_DOWN) );
+  }
+  
+  @Override
+  protected void drawCheckpoint() {
+    stroke( palette.powerDownHighlight );
+    if( car != null ) {
+      strokeWeight(3);
+    } else strokeWeight(1);
+    shape(tile.shape);
+  }
+  
 }

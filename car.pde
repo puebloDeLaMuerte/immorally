@@ -22,8 +22,8 @@ public class Car {
   private float steeringSensibility = 0.002f;
 
   private float acceleration;
-  private float enginePower = 0.007f;//0.007f;
-  private float maxAcceleration = 0.04;
+  private float enginePower = 0.004f;//0.007f;
+  private float maxAcceleration = 0.05; // ehemals 0.4
 
   private float breaking;
   private float breakPower = 0.018;
@@ -52,6 +52,9 @@ public class Car {
   
   PShape frontTyre = createShape();
   PShape rearTyre = createShape();
+  
+  
+  private ArrayList<CarStatus> stati = new ArrayList<CarStatus>();
   
   /*
   private float maxLatGrip = 0.02;
@@ -105,13 +108,44 @@ public class Car {
   }
 
 
+  public float getEngineLevel() {
+    return acceleration;
+  }
+
+
   public float getSpeed() {
-    
-    //float delta = deltaTime * deltaFactor;
     
     return lastMove.mag();
   }
 
+
+  public void triggerStatus( CarStatus status ) {
+    stati.add( status );
+  }
+
+
+  public void updateStatus() {
+    CarStatus removal = null;
+    for( CarStatus status : stati ) {
+      if( status.isFinished(millis()) ) {
+        removal = status;
+        break;
+      }
+    }
+    if( removal != null ) stati.remove( removal );
+  }
+  
+  
+  public boolean hasStatus( StatusType type ) {
+    for( CarStatus status : stati ) {
+      if( status.getType() == type ) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  
 
   public void TakeInput( float accelerationInput, float breakingInput, float steeringInput ) {
 
@@ -122,6 +156,10 @@ public class Car {
     steeringInput *= delta;
     accelerationInput *= delta;
     breakingInput *= delta;
+
+    if( hasStatus( StatusType.POWER_DOWN ) ) {
+      accelerationInput = 0;
+    }
 
     if ( steeringInput == 0f ) {
       steering -= ( 0.1 * steering ) * delta;// 0.99 * delta;
@@ -226,7 +264,7 @@ public class Car {
     newDir.add( thisBreaking );
     newDir.add( thisSteering );
     newDir.add( thisSlide );
-    //newDir.add( thisSlide );
+    
     
     //dplott.setPlot(  PVector.sub( PVector.add( PVector.mult(newDir, 1-slideFactor), PVector.mult(lastMove,slideFactor)), newDir)  , pos, rotation, color( 255,255,0) );
     
@@ -254,6 +292,7 @@ public class Car {
     PVector scaledNewDir = new PVector( newDir.x * delta, newDir.y * delta );
     //scaledNewDir = scaledNewDir.mult(delta);
     pos.add(scaledNewDir);
+    
     //pos.add( thisSlide );
     
     // EMIT SPARKS MAYBE ??
@@ -335,7 +374,7 @@ public class Car {
     line( tyreXrl, tyreYrl, tyreXrr, tyreYrr );
     line( tyreXfl, tyreYfl, tyreXfr, tyreYfr );
     
-    tyreFLworldPos = new PVector(screenX(tyreXfl, tyreYfl),screenY(tyreXfl, tyreYfl )); //<>//
+    tyreFLworldPos = new PVector(screenX(tyreXfl, tyreYfl),screenY(tyreXfl, tyreYfl ));
     tyreFRworldPos = new PVector(screenX(tyreXfr, tyreYfr),screenY(tyreXfr, tyreYfr ));
     tyreRLworldPos = new PVector(screenX(tyreXrl, tyreYrl),screenY(tyreXrl, tyreYrl ));
     tyreRRworldPos = new PVector(screenX(tyreXrr, tyreYrr),screenY(tyreXrr, tyreYrr ));
@@ -409,5 +448,30 @@ public class Car {
     popMatrix();
   }
   
+}
+
+public enum StatusType {
+    POWER_DOWN
+  }
+
+public class CarStatus {
+  private int triggeredMillis;
+  private int durationMillis;
+  private int finishedMillis;
+  private StatusType type; 
   
+  public CarStatus( int triggeredMillis, int durationMillis, StatusType type ) {
+    this.triggeredMillis = triggeredMillis;
+    this.durationMillis = durationMillis;
+    this.finishedMillis = triggeredMillis + durationMillis;
+    this.type = type;
+  }
+  
+  public boolean isFinished( int millis ) {
+    return millis > finishedMillis;
+  }
+  
+  public StatusType getType() {
+    return type;
+  }
 }

@@ -102,6 +102,10 @@ public class Track {
               t.checkpoint = new Checkpoint(t, typeData);
               cpm.checkpoints.add(t.checkpoint);
             }
+            if ( typeNr == 2 ) {
+              t.checkpoint = new PowerDownCheckpoint(t); //<>//
+              cpm.specialCheckpoints.add(t.checkpoint);
+            }
             tiles.add(t);
           }
         }
@@ -126,9 +130,9 @@ public class Track {
       s.add("tile");
       s.add("type");
       if ( t.checkpoint != null ) {
-        s.add("1");
+        s.add(""+t.checkpoint.getTypeNr());
         s.add("typeData");
-        s.add(""+t.checkpoint.checkPointNumber);
+        s.add(""+t.checkpoint.getCheckpointData());
       } else {
         s.add("0");
       }
@@ -225,10 +229,14 @@ public class Track {
         //if ( PGS_ShapePredicates.containsPoint(t.shape, car.pos) ) {
         
         List twpcontains = PGS_ShapePredicates.containsPoints(t.shape, car.getTyreWorldPos());
-        if ( twpcontains.contains(true) ) { //<>//
-          t.drawHighlight(1f); //<>//
+        if ( twpcontains.contains(true) ) {
+          t.drawHighlight(1f);
           //for(Tile n : t.neighbours) n.drawHighlight();
           if ( t.checkpoint != null ) {
+            
+            if( t.checkpoint instanceof PowerDownCheckpoint ) {
+              println("power down");
+            }
             t.checkpoint.contact(car);
           }
         } else if ( t.hasHighlight() ) {

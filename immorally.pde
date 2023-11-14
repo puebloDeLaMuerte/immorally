@@ -134,16 +134,21 @@ void saveTrackAs() {
 
 
 
-
-
-
 void mousePressed() {
   if( setCheckpoints ) {
     for( Tile t : track.tiles ) {
-      if( t.isMouseOver && t.checkpoint == null ) {
-        Checkpoint c = new Checkpoint(t, cpm.checkpoints.size()+1);
-        t.checkpoint = c;
-        cpm.checkpoints.add(c);
+      if( t.isMouseOver ) {
+        if( t.checkpoint == null ) {
+          Checkpoint c = new Checkpoint(t, cpm.checkpoints.size()+1);
+          t.checkpoint = c;
+          cpm.checkpoints.add(c);
+        }
+        else if( t.checkpoint.getClass() == Checkpoint.class ) {
+          cpm.checkpoints.remove(t.checkpoint);
+          PowerDownCheckpoint pdcp = new PowerDownCheckpoint(t);
+          cpm.specialCheckpoints.add( pdcp );
+          t.checkpoint = pdcp;
+        }
       }
     }
   }

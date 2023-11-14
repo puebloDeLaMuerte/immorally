@@ -24,6 +24,7 @@ public void raceLoop() {
   sparks.drawSparks(g, 200);
   
   updateDelta();
+  car.updateStatus();
   calculateInput(car);
   car.updatePhysics();
   
@@ -33,8 +34,10 @@ public void raceLoop() {
   popStyle();
   cpm.drawCheckpoints();
   
+  
   //playEngine(car.getSpeed());
   playElectric(car.getSpeed());
+  //playElectric(car.getEngineLevel()*10);
   car.drawCar(skidLayer);
   
   cpm.evaluateCheckpoints();

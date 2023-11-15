@@ -6,8 +6,9 @@
 // * Blocker: destroy car
 // * Blocker: rebound CAr
 // * Rotating barriers
-// * 
-//
+// * GameMode: [fastest single lap] [most laps in time]
+// * Better explain what to do... onboarding
+// * Flickering checkpoints on newLap (increase visibility of on-off state)
 //
 //
 //

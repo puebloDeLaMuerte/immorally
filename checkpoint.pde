@@ -21,6 +21,26 @@ public class CheckpointManager {
   }
 
 
+  public int getLowestAvailableCheckpointNr() {
+    
+    if( checkpoints == null || checkpoints.size() == 0 ) return 1;
+    
+    int prevInt = 0; //<>//
+    int newInt = 0;
+    
+    while( newInt == prevInt ) {
+      prevInt = newInt; //<>//
+      newInt ++;
+      for( Checkpoint cp : checkpoints ) {
+        if( cp.getCheckpointData() == newInt ) {
+          prevInt = newInt;
+          break;
+        }
+      }
+    }
+    return newInt;
+  }
+
   public String getMedianTime() {
 
     long totalSeconds = medianTime / 1000;
@@ -89,12 +109,12 @@ public class CheckpointManager {
    if( checkpoints.size() == 0 ) return;
    
    float s = carSize * 0.9;
-    //<>//
+   
    for( int i = 0; i < checkpoints.size(); i++ ) {
    if( i == 0 ) {
    checkpoints.get(0).checkForContact(x,y,s);
    if( checkpoints.get(0).secondChecked && checkpoints.get(0).left ) {//&& checkpoints.get(checkpoints.size()-1).checked ) {
-   newLap(); //<>// //<>//
+   newLap(); //<>//
    }
    }
    else if( checkpoints.get(i-1).checked && !checkpoints.get(i).checked) {
@@ -104,7 +124,7 @@ public class CheckpointManager {
    }
    */
 
-  public void newLap() {
+  public void newLap() { //<>//
     println("newLap");
 
     boolean allchecked = true;
@@ -124,7 +144,7 @@ public class CheckpointManager {
 
     // IS IT A VALID LAP?
     if ( !allchecked ) {
-      playBoo(); //<>//
+      playBoo();
       for ( Checkpoint cp : checkpoints ) {
         cp.newLap();
       }
@@ -290,7 +310,7 @@ public class Checkpoint {
       } else {
         stroke(palette.darkGlow);
       }
-    }
+    } //<>//
     shape(tile.shape);
   }
 }
@@ -310,7 +330,7 @@ public class SpecialCheckpointManager {
   }
 }
 
- //<>//
+
 
 
 

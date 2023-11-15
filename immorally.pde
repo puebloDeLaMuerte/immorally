@@ -139,7 +139,7 @@ void mousePressed() {
     for( Tile t : track.tiles ) {
       if( t.isMouseOver ) {
         if( t.checkpoint == null ) {
-          Checkpoint c = new Checkpoint(t, cpm.checkpoints.size()+1);
+          Checkpoint c = new Checkpoint(t, cpm.getLowestAvailableCheckpointNr());
           t.checkpoint = c;
           cpm.checkpoints.add(c);
         }
@@ -155,6 +155,7 @@ void mousePressed() {
           t.checkpoint = null;
         }
       }
+      cpm.sortCheckpoints();
     }
   }
 }

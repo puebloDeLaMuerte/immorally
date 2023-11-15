@@ -103,7 +103,7 @@ public class Track {
               cpm.checkpoints.add(t.checkpoint);
             }
             if ( typeNr == 2 ) {
-              t.checkpoint = new PowerDownCheckpoint(t); //<>//
+              t.checkpoint = new PowerDownCheckpoint(t);
               cpm.specialCheckpoints.add(t.checkpoint);
             }
             tiles.add(t);

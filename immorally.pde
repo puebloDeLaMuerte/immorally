@@ -104,8 +104,8 @@ void draw() {
     newTrackKeyPressed = false;
     track = new Track(null);
     skidLayer = createGraphics(width,height);
-    cpm.checkpoints = new ArrayList();
-    cpm.bestLapTime = 999999999999999999l;
+    cpm.reset();
+    
     //playYeah();
   }
   
@@ -148,6 +148,11 @@ void mousePressed() {
           PowerDownCheckpoint pdcp = new PowerDownCheckpoint(t);
           cpm.specialCheckpoints.add( pdcp );
           t.checkpoint = pdcp;
+        }
+        else {
+          cpm.specialCheckpoints.remove(t.checkpoint);
+          cpm.checkpoints.remove(t.checkpoint);
+          t.checkpoint = null;
         }
       }
     }

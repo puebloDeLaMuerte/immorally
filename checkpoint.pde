@@ -14,7 +14,11 @@ public class CheckpointManager {
   int validLapCount = 0;
 
 
-
+  public void reset() {
+    checkpoints = new ArrayList();
+    specialCheckpoints = new ArrayList();
+    bestLapTime = 999999999999999999l;
+  }
 
 
   public String getMedianTime() {
@@ -85,16 +89,16 @@ public class CheckpointManager {
    if( checkpoints.size() == 0 ) return;
    
    float s = carSize * 0.9;
-   
+    //<>//
    for( int i = 0; i < checkpoints.size(); i++ ) {
    if( i == 0 ) {
    checkpoints.get(0).checkForContact(x,y,s);
-   if( checkpoints.get(0).secondChecked && checkpoints.get(0).left ) {//&& checkpoints.get(checkpoints.size()-1).checked ) { //<>//
-   newLap(); //<>//
+   if( checkpoints.get(0).secondChecked && checkpoints.get(0).left ) {//&& checkpoints.get(checkpoints.size()-1).checked ) {
+   newLap(); //<>// //<>//
    }
    }
    else if( checkpoints.get(i-1).checked && !checkpoints.get(i).checked) {
-   checkpoints.get(i).checkForContact(x,y,s); //<>//
+   checkpoints.get(i).checkForContact(x,y,s);
    } //<>//
    }
    }
@@ -120,11 +124,11 @@ public class CheckpointManager {
 
     // IS IT A VALID LAP?
     if ( !allchecked ) {
-      playBoo();
+      playBoo(); //<>//
       for ( Checkpoint cp : checkpoints ) {
         cp.newLap();
       }
-      return; //<>//
+      return;
     } //<>//
     validLapCount++;
 
@@ -306,11 +310,11 @@ public class SpecialCheckpointManager {
   }
 }
 
+ //<>//
 
 
 
-
-public class PowerDownCheckpoint extends Checkpoint { //<>//
+public class PowerDownCheckpoint extends Checkpoint {
   
   
   public PowerDownCheckpoint(Tile t) {
@@ -328,7 +332,7 @@ public class PowerDownCheckpoint extends Checkpoint { //<>//
   @Override
   protected void doEffect( Car car ) {
     playDisconnect();
-    car.triggerStatus( new CarStatus( millis(), 1000, StatusType.POWER_DOWN) );
+    car.triggerStatus( new CarStatus( millis(), 600, StatusType.POWER_DOWN) );
   }
   
   @Override

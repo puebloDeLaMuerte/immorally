@@ -23,13 +23,13 @@ public class Car {
 
   private float acceleration;
   private float enginePower = 0.004f;//0.007f;
-  private float maxAcceleration = 0.05; // ehemals 0.4
+  private float maxAcceleration = 0.045; // ehemals 0.4
 
   private float breaking;
   private float breakPower = 0.018;
   private float maxBreaking = 0.035;
 
-  private float carFriction = 0.005;
+  private float carFriction = 0.0045;
 
   private float maxGripTotal = 0.08;
   private boolean maxGripExceeded;

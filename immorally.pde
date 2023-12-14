@@ -107,6 +107,7 @@ void draw() {
     cpm.reset();
     
     //playYeah();
+    playLove();
   }
   
 

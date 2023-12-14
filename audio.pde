@@ -14,7 +14,7 @@ SoundFile boo;
 SoundFile boom;
 SoundFile staticElectric;
 SoundFile disconnect;
-
+SoundFile love;
 void initAudio() {
   
   String audioFolder = "audio/";
@@ -38,10 +38,16 @@ void initAudio() {
   yeah = new SoundFile(this, audioFolder+"496087__dastudiospr__male-yeah.wav");
   boo = new SoundFile(this, audioFolder+"boo.wav");
   disconnect = new SoundFile(this, audioFolder+"Disconnect.wav");
+  love = new SoundFile(this, audioFolder+"Pips_Auto 1 .mp3");
   
   lap.amp(0.1);
   ding.amp(1.4);
   
+}
+
+void playLove() {
+  println("love");
+  love.play();
 }
 
 void playStatic(boolean play) {

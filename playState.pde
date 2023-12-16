@@ -1,5 +1,8 @@
 public void raceLoop() {
   
+  //pushStyle();
+  //pushMatrix();
+  
   
   
   updateSkidLayer();
@@ -76,8 +79,11 @@ public void raceLoop() {
     playYeah();*/
   }
   
-  debugPrintFPS(width/2, height-100);
+  //debugPrintFPS(width/2, height-100);
   dplott.draw();
+  
+  //popMatrix();
+  //popStyle();
 }
 
 

@@ -188,91 +188,75 @@ public class Car {
 
   public void updatePhysics() {
 
+    PVector newDir = new PVector();
+    newDir.add(lastMove);
+    
+    // ROTATE
 
-    //println("dt: " + deltaTime );
-
-       
-    rotation += (steering * delta);
-    //rotation += steering;
+    rotation += ( steering * delta );
     PVector thisRotation = PVector.fromAngle(rotation);
 
+    // ACCELERATE
 
     PVector thisAcceleration = new PVector(thisRotation.x, thisRotation.y);
     thisAcceleration.mult( acceleration * delta );
-    //thisAcceleration.mult( acceleration );
     
+    newDir.add(thisAcceleration);
+    
+    
+    // BREAKING
 
     PVector lastDir = new PVector(lastMove.x,lastMove.y).normalize();
     PVector thisBreaking = new PVector(-lastDir.x, -lastDir.y);
-    thisBreaking.mult(breaking * delta);
-    //thisBreaking.mult(breaking);
-
+    thisBreaking.mult( breaking * delta );
     
-
-    float lastMoveMag = lastMove.mag();
-    PVector steeredDir = new PVector(thisRotation.x, thisRotation.y).setMag(lastMoveMag); 
-    PVector thisSteering = PVector.sub(steeredDir, lastMove);
+    newDir.add(thisBreaking);
     
-        
-        
-        
-    PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);
+    // STEERING
 
-    //PVector force = PVector.sub( PVector.add( lastMove, demand ), lastMove ); // this seems to be bullshit - i think this equates to force = demand.
-    //PVector force = demand;
-    //float forceMag = force.mag();
-    //skidAmount = forceMag;
+    //float lastMoveMag = new PVector(lastMove.x * delta, lastMove.y * delta).mag(); // with delta
+    //float lastMoveMag = lastMove.mag();
+    PVector steeredDir = new PVector(thisRotation.x, thisRotation.y).setMag( newDir.mag() ); 
+    PVector thisSteering = PVector.sub(steeredDir, newDir);
     
-    //dplott.scale = 40;
-    //dplott.setPlot( demand, pos, rotation, color(255,0,0) );
+    newDir.add(thisSteering);
+    
+    // SLIDE
+        
+    PVector demand = new PVector(0,0).add(thisAcceleration).add(thisBreaking).add(thisSteering);//.add(thisFriction);   
     
     float slideFactor = 0;
     //float slideFactor = 1-log( (forceMag*(8))+(1)) ;
     maxGripExceeded = true;
     
-        
+    
     //slideFactor = 1-((thisSteering.mag())*0.04);  // works but is not logically right
-    slideFactor += (thisSteering.mag() * 50f);
-    slideFactor += (demand.mag() * 5f);
+    slideFactor += (thisSteering.mag() * 50f) ;
+    slideFactor += (demand.mag() * 5f) ;
     
-    
-    //slideFactor = constrain(slideFactor,0,0.99);
+    slideFactor /= delta; // don't know why, but thi seems to make sliding behave correctly over different frameRates
+        
     slideFactor = slideFactor / (slideFactor+2f);
+        
     
-    skidAmount = slideFactor;
     
-    //println("slide Factor:   " + slideFactor);
+    println(slideFactor);
     
-    //skidAmount += (1-slideFactor) * 10;
+    //skidAmount = slideFactor;
     
     //demand.add( thisSteering.mult(-1).mult(slideFactor) ); // this is where sliding is added
     PVector thisSlide = new PVector( thisSteering.x * -1, thisSteering.y * -1 ).mult(slideFactor);
     
-    //öööööööööööööööö PVector thisSlide = new PVector( (lastMove.x * slideFactor) + lastMov  );
+    newDir.add(thisSlide);
     
-    //demand.add(thisSlide);
-    //println(thisBreaking.mag());
-    
-    //float breakSteerFactor =  1-(thisBreaking.mag()*0.01);
-    //demand.add( thisSteering.mult(-1).mult(breakSteerFactor) );
-    
-    
-    
+    /*
     PVector newDir = new PVector();
     newDir.add( lastMove );
     newDir.add( thisAcceleration );
     newDir.add( thisBreaking );
     newDir.add( thisSteering );
     newDir.add( thisSlide );
-    
-    
-    //dplott.setPlot(  PVector.sub( PVector.add( PVector.mult(newDir, 1-slideFactor), PVector.mult(lastMove,slideFactor)), newDir)  , pos, rotation, color( 255,255,0) );
-    
-    //newDir = PVector.add( PVector.mult(newDir, 1-slideFactor), PVector.mult(lastMove,slideFactor) );
-    
-    //if ( newDir.mag() > maxSpeed ) newDir.setMag(maxSpeed);
-    
-    
+    */
     
     // old pip style friction calculation
     //PVector thisFriction = new PVector( -newDir.x, -newDir.y ).mult(carFriction).mult((0.0015)+newDir.mag())/*.mult(delta)*/;
@@ -284,19 +268,20 @@ public class Car {
     frictionForce.mult(delta);
     newDir.add(frictionForce);
     
+    
     // TODO: apply more friction if the cars rotation is not aligned with it's actual direction of travel  
     
     lastMove = new PVector(newDir.x, newDir.y);
     
-    //newDir.mult(delta);
     PVector scaledNewDir = new PVector( newDir.x * delta, newDir.y * delta );
-    //scaledNewDir = scaledNewDir.mult(delta);
-    pos.add(scaledNewDir);
+    //lastMove = new PVector(scaledNewDir.x, scaledNewDir.y);
     
-    //pos.add( thisSlide );
+    pos.add(scaledNewDir);
+    //pos.add(newDir);
+    
     
     // EMIT SPARKS MAYBE ??
-
+    /*
     if( getSpeed() > sparksSpeed * deltaTime * deltaFactor) {
       
       if( random(0,1) > 0.98 ) {
@@ -307,6 +292,7 @@ public class Car {
         sparks.releaseSpark(PVector.add(pos,sparkPos),newDir);
       }
     }
+    */
   }
 
 

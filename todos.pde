@@ -9,8 +9,9 @@
 // * GameMode: [fastest single lap] [most laps in time]
 // * Better explain what to do... onboarding
 // * Flickering checkpoints on newLap (increase visibility of on-off state)
-//
-//
+// * Tires are getting hot with demand and loose friction
+// * powerup-tiles
+// * energy-management (fule refule with certain tiles?)
 //
 //
 //

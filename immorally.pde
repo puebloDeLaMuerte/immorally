@@ -163,12 +163,13 @@ void mousePressed() {
 }
 
 
-public void loadNextTrack() {
+public void loadNextTrack(int delta) {
   
   initSkidLayer();
   cpm = new CheckpointManager();
-  trackIndex++;
+  trackIndex += delta;
   if( trackIndex >= trackFiles.size() ) trackIndex = 0;
+  if( trackIndex < 0 ) trackIndex = trackFiles.size()-1;
   loadTrack(trackIndex);
 }
 

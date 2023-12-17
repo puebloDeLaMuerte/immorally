@@ -21,6 +21,7 @@ char drawCheckpointsKey = 'c';
 char saveTrackKey = 'S';
 
 char loadTrackKey = 'l';
+char loadPrevTrackKey = 'L';
 
 char printDebugInfoKey = 'p';
 
@@ -49,7 +50,8 @@ void keyPressed(KeyEvent e) {
   if( k == saveTrackKey ) saveTrackAs();
   
   //if( k == loadTrackKey ) track.loadTrack = "newTrack.track";
-  if( k == loadTrackKey ) loadNextTrack();
+  if( k == loadTrackKey ) loadNextTrack(1);
+  if( k == loadPrevTrackKey ) loadNextTrack(-1);
   
   if( k == printDebugInfoKey ) printDebugInfo();
   

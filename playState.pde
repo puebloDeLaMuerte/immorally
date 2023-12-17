@@ -3,6 +3,13 @@ public void raceLoop() {
   //pushStyle();
   //pushMatrix();
   
+  /*
+  // DEBUG draw tyre collision points
+  rect( car.getTyreWorldPos().get(0).x, car.getTyreWorldPos().get(0).y, 2,2 );
+  rect( car.getTyreWorldPos().get(1).x, car.getTyreWorldPos().get(1).y, 2,2 );
+  rect( car.getTyreWorldPos().get(2).x, car.getTyreWorldPos().get(2).y, 2,2 );
+  rect( car.getTyreWorldPos().get(3).x, car.getTyreWorldPos().get(3).y, 2,2 );
+  */
   
   
   updateSkidLayer();

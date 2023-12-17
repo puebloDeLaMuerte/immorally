@@ -49,6 +49,8 @@ public class Car {
 
   float tyreFrontOffset = -15;
   float tyreRearOffset = 4;
+  
+  float tyreCollisionFactor = 1.8f; // add some padding to where tyre calculations are calculated. higher positive values put the collision detection points outwards from the car center.
 
   PShape frontTyre = createShape();
   PShape rearTyre = createShape();
@@ -362,10 +364,12 @@ public class Car {
     line( tyreXrl, tyreYrl, tyreXrr, tyreYrr );
     line( tyreXfl, tyreYfl, tyreXfr, tyreYfr );
 
-    tyreFLworldPos = new PVector(screenX(tyreXfl, tyreYfl), screenY(tyreXfl, tyreYfl ));
-    tyreFRworldPos = new PVector(screenX(tyreXfr, tyreYfr), screenY(tyreXfr, tyreYfr ));
-    tyreRLworldPos = new PVector(screenX(tyreXrl, tyreYrl), screenY(tyreXrl, tyreYrl ));
-    tyreRRworldPos = new PVector(screenX(tyreXrr, tyreYrr), screenY(tyreXrr, tyreYrr ));
+    
+
+    tyreFLworldPos = new PVector(screenX(tyreXfl*tyreCollisionFactor, tyreYfl*tyreCollisionFactor), screenY(tyreXfl*tyreCollisionFactor, tyreYfl*tyreCollisionFactor ));
+    tyreFRworldPos = new PVector(screenX(tyreXfr*tyreCollisionFactor, tyreYfr*tyreCollisionFactor), screenY(tyreXfr*tyreCollisionFactor, tyreYfr*tyreCollisionFactor ));
+    tyreRLworldPos = new PVector(screenX(tyreXrl*tyreCollisionFactor, tyreYrl*tyreCollisionFactor), screenY(tyreXrl*tyreCollisionFactor, tyreYrl*tyreCollisionFactor ));
+    tyreRRworldPos = new PVector(screenX(tyreXrr*tyreCollisionFactor, tyreYrr*tyreCollisionFactor), screenY(tyreXrr*tyreCollisionFactor, tyreYrr*tyreCollisionFactor ));
 
     fill(palette.black);
     stroke(palette.mainColorPrimary);

@@ -35,7 +35,7 @@ void keyPressed(KeyEvent e) {
   
   //if( e.isAutoRepeat() ) return;
   
-  char k = e.getKey(); //<>//
+  char k = e.getKey();
     
   if( k == turnLeftKey ) turnLeftPressed = true;
   if( k == turnRightKey ) turnRightPressed = true;

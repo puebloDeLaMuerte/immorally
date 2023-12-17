@@ -145,11 +145,17 @@ void mousePressed() {
           t.checkpoint = c;
           cpm.checkpoints.add(c);
         }
-        else if( t.checkpoint.getClass() == Checkpoint.class ) {
+        else if( t.checkpoint.getClass() == Checkpoint.class ) {  // it has a normal checkpoint
           cpm.checkpoints.remove(t.checkpoint);
           PowerDownCheckpoint pdcp = new PowerDownCheckpoint(t);
           cpm.specialCheckpoints.add( pdcp );
           t.checkpoint = pdcp;
+        }
+        else if( t.checkpoint.getClass() == PowerDownCheckpoint.class ) { // it has a powerDownCheckpoint
+          cpm.specialCheckpoints.remove( t.checkpoint );
+          DestructionCheckpoint dcp = new DestructionCheckpoint(t);
+          cpm.specialCheckpoints.add( dcp );
+          t.checkpoint = dcp;
         }
         else {
           cpm.specialCheckpoints.remove(t.checkpoint);

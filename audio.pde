@@ -59,6 +59,10 @@ void playStatic(boolean play) {
   }
 }
 
+void playDestruct() {
+  boom.play();
+}
+
 void playBoom() {
   boom.play();
 }

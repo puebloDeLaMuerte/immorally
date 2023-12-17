@@ -108,7 +108,12 @@ public class Track {
             if ( typeNr == 2 ) {
               t.checkpoint = new PowerDownCheckpoint(t);
               cpm.specialCheckpoints.add(t.checkpoint);
-              println("added special Checkpoint: " + t.checkpoint.checkPointNumber);
+              println("added powerDownCheckpoint: " + t.checkpoint.checkPointNumber);
+            }
+            if ( typeNr == 3 ) {
+              t.checkpoint = new DestructionCheckpoint(t);
+              cpm.specialCheckpoints.add(t.checkpoint);
+              println("added DestructionCheckpoint: " + t.checkpoint.checkPointNumber);
             }
             tiles.add(t);
           }
@@ -141,8 +146,6 @@ public class Track {
       } else {
         s.add("0");
       }
-
-
 
       s.add("shape");
 
@@ -241,9 +244,6 @@ public class Track {
           //for(Tile n : t.neighbours) n.drawHighlight();
           if ( t.checkpoint != null ) {
             
-            if( t.checkpoint instanceof PowerDownCheckpoint ) {
-              println("power down");
-            }
             t.checkpoint.contact(car);
           }
         } else if ( t.hasHighlight() ) {

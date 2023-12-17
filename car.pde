@@ -54,6 +54,8 @@ public class Car {
 
   PShape frontTyre = createShape();
   PShape rearTyre = createShape();
+  
+  public Explosion explosion = null;
 
 
   private ArrayList<CarStatus> stati = new ArrayList<CarStatus>();
@@ -134,7 +136,16 @@ public class Car {
         break;
       }
     }
-    if ( removal != null ) stati.remove( removal );
+    if ( removal != null ) {
+      if( removal.type == StatusType.DESTRUCTION ) {
+        explosion = null;
+        pos = new PVector(width/2,height/2);
+        acceleration = 0;
+        breaking = 0;
+        lastMove = new PVector(0,0);
+      }
+      stati.remove( removal );
+    }
   }
 
 
@@ -189,6 +200,11 @@ public class Car {
 
   public void updatePhysics() {
 
+    if( hasStatus(StatusType.DESTRUCTION) ) {
+      if( explosion != null ) explosion.tick();
+      return;
+    }
+    
     PVector newDir = new PVector();
     newDir.add(lastMove);
 
@@ -254,15 +270,6 @@ public class Car {
 
     newDir.add(thisSlide);
 
-    /*
-    PVector newDir = new PVector();
-     newDir.add( lastMove );
-     newDir.add( thisAcceleration );
-     newDir.add( thisBreaking );
-     newDir.add( thisSteering );
-     newDir.add( thisSlide );
-     */
-
     // old pip style friction calculation
     //PVector thisFriction = new PVector( -newDir.x, -newDir.y ).mult(carFriction).mult((0.0015)+newDir.mag())/*.mult(delta)*/;
     //newDir.add(thisFriction);
@@ -314,6 +321,13 @@ public class Car {
 
   public void drawCar(PGraphics skidLayer) {
 
+    if( hasStatus(StatusType.DESTRUCTION) ) {
+      if( explosion != null ) {
+        explosion.drawExplosion(g,255);
+        explosion.drawExplosion(skidLayer,20);
+      }
+      return;
+    }
 
 
     float xOffset = carlength/2;
@@ -438,10 +452,73 @@ public class Car {
     endShape();
     popMatrix();
   }
+  
+  
+  
+  
+  
+  public ArrayList<PShapeInfo> getCarComponents() {
+    
+    
+    ArrayList<PShapeInfo> components = new ArrayList<PShapeInfo>();
+
+    // Add the car body as a component
+    PShape carBody = createShape();
+    carBody.beginShape();
+    carBody.vertex(-carlength, 0);
+    carBody.vertex(-carlength * 0.3, -carheight);
+    carBody.vertex(carlength, 0);
+    carBody.vertex(-carlength * 0.3, carheight);
+    carBody.vertex(-carlength, 0);
+    carBody.endShape(CLOSE); // Ensure the shape is closed
+    carBody.disableStyle();
+    components.add(new PShapeInfo(carBody, new PVector(pos.x, pos.y), rotation));
+
+    
+
+    // Calculate tire positions
+    float xOffset = carlength/2;
+    float tyreXrl = carlength - xOffset + tyreRearOffset;
+    float tyreYrl = -tyreOutnessR + -(carheight/2)-(tirewidthR/2);
+    float tyreXrr = carlength - xOffset + tyreRearOffset;
+    float tyreYrr = tyreOutnessR + (carheight/2)+(tirewidthR/2);
+    float tyreXfl = (carlength/2) - xOffset + tyreFrontOffset;
+    float tyreYfl = -tyreOutnessF + -(carheight/2)-(tirewidthF/2);
+    float tyreXfr = (carlength/2) - xOffset + tyreFrontOffset;
+    float tyreYfr = tyreOutnessF + (carheight/2)+(tirewidthF/2);
+
+    // Add each tire as a component
+    // Front Left Tire
+    components.add(new PShapeInfo(createTireShape(tireradiusF, tirewidthF), new PVector(pos.x + tyreXfl, pos.y + tyreYfl), rotation + steering * 15));
+    // Front Right Tire
+    components.add(new PShapeInfo(createTireShape(tireradiusF, tirewidthF), new PVector(pos.x + tyreXfr, pos.y + tyreYfr), rotation + steering * 15));
+    // Rear Left Tire
+    components.add(new PShapeInfo(createTireShape(tireradiusR, tirewidthR), new PVector(pos.x + tyreXrl, pos.y + tyreYrl), rotation));
+    // Rear Right Tire
+    components.add(new PShapeInfo(createTireShape(tireradiusR, tirewidthR), new PVector(pos.x + tyreXrr, pos.y + tyreYrr), rotation));
+
+    return components;
+  }
+  
+  // Function to create a tire shape
+    PShape createTireShape(float radius, float width) {
+        PShape tire = createShape();
+        tire.beginShape();
+        tire.vertex(-radius/2, 0);
+        tire.vertex(0, width/2);
+        tire.vertex(radius/2, 0);
+        tire.vertex(0, -width/2);
+        tire.vertex(-radius/2, 0);
+        tire.endShape();
+        tire.disableStyle();
+        return tire;
+    }
+
 }
 
 public enum StatusType {
-  POWER_DOWN
+  POWER_DOWN,
+  DESTRUCTION
 }
 
 public class CarStatus {
@@ -460,6 +537,7 @@ public class CarStatus {
   public boolean isFinished( int millis ) {
     return millis > finishedMillis;
   }
+
 
   public StatusType getType() {
     return type;

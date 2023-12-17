@@ -14,5 +14,6 @@ public class Palette {
   int powerDownLowlight = #e0a654;
   //int carBasicColor = color();
   
+  int destruction = color(200,0,20);
    
 }

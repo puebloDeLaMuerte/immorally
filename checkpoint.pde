@@ -377,6 +377,41 @@ public class PowerDownCheckpoint extends Checkpoint {
       strokeWeight(3);
     } else strokeWeight(1);
     shape(tile.shape);
+  } 
+}
+
+
+public class DestructionCheckpoint extends Checkpoint {
+  
+  public DestructionCheckpoint(Tile t) {
+    super(t,0);
+    println("New DestructionCheckpoint");
   }
   
+  @Override
+  public int getTypeNr() {
+    return 3;
+  }
+  
+  
+  @Override
+  protected void doEffect( Car car ) {
+    
+    playDestruct();
+    car.triggerStatus( new CarStatus( millis(), 1600, StatusType.DESTRUCTION) );
+    car.explosion = new Explosion(car.getCarComponents(), car.lastMove);
+    
+    for(int i = 0; i < 20; i++) {
+      sparks.releaseSpark(car.pos, car.lastMove);
+    }
+  }
+  
+  @Override
+  protected void drawCheckpoint() {
+    stroke( palette.destruction );
+    if( car != null ) {
+      strokeWeight(3);
+    } else strokeWeight(1);
+    shape(tile.shape);
+  } 
 }

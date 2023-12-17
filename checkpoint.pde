@@ -85,6 +85,15 @@ public class CheckpointManager {
     return String.format("%03d : %03d", seconds, milli);
   }
 
+  public boolean isLapReadyForFinish() {
+    
+    for( int i = 1; i < checkpoints.size(); i++) {
+      if( !checkpoints.get(i).checked ) {
+        return false;
+      }
+    }
+    return true;
+  }
 
 
   public void evaluateCheckpoints() {
@@ -296,21 +305,27 @@ public class Checkpoint {
 
   protected void drawCheckpoint() {
     //text(checkPointNumber,tile.center.x,tile.center.y);
-    if ( !checked) {
-      strokeWeight(3);
-      if ( checkPointNumber != 1 ) {
+    
+    if( checkPointNumber == 1 ) { // is it the 'startFinish' checkpoint?
+      stroke( palette.darkGlow );
+      if( cpm.isLapReadyForFinish() ) {
+        strokeWeight(3);
+      }
+      else {
+        strokeWeight(1);
+      }
+    }
+    else { // it's a normal checkpoint
+      
+      if ( !checked ) {
+        strokeWeight(3);
         stroke(palette.mainColorPrimary);
       } else {
-        stroke(palette.darkGlow);
-      }
-    } else {
-      strokeWeight(1);
-      if ( checkPointNumber != 1 ) {
+        strokeWeight(1);
         stroke(palette.mainColorSecondary);
-      } else {
-        stroke(palette.darkGlow);
       }
-    } //<>//
+    }
+     //<>//
     shape(tile.shape);
   }
 }

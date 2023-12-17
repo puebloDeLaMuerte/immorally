@@ -49,9 +49,11 @@ public class Track {
       return false;
     } else {
       cpm.checkpoints = new ArrayList<Checkpoint>();
+      cpm.specialCheckpoints = new ArrayList<Checkpoint>();
       l++;
       trackName = lines[0];
-
+      println("track name: " + trackName);
+      
       while ( !lines[l].equals("/track") ) {
         l++;
         if ( lines[l].equals("tile") ) {
@@ -101,19 +103,22 @@ public class Track {
             if ( typeNr == 1 ) { // typeNr 1 means Checkpoint
               t.checkpoint = new Checkpoint(t, typeData);
               cpm.checkpoints.add(t.checkpoint);
+              println("added Checkpoint: " + t.checkpoint.checkPointNumber);
             }
             if ( typeNr == 2 ) {
               t.checkpoint = new PowerDownCheckpoint(t);
               cpm.specialCheckpoints.add(t.checkpoint);
+              println("added special Checkpoint: " + t.checkpoint.checkPointNumber);
             }
             tiles.add(t);
           }
         }
       }
     }
+    
     cpm.sortCheckpoints();
-    cpm.checkpoints.get(0).contact(car);
-
+    //cpm.checkpoints.get(0).contact(car);
+    
     return true;
   }
 
@@ -165,7 +170,9 @@ public class Track {
 
 
   public void updateTrack() {
+    
     if ( !isGenerated ) {
+      
       playStatic(true);
       car = new Car(width/2, height/2, 0);
       String gens = "generating...";
@@ -699,6 +706,7 @@ public class Tile {
     if ( PGS_ShapePredicates.containsPoint(shape, new PVector(x, y)) ) {
 
       isMouseOver = true;
+      shape.disableStyle();
 
       return true;
     } else {

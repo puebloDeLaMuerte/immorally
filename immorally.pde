@@ -99,8 +99,8 @@ void draw() {
   }
   
 
-
   if( newTrackKeyPressed || track.splitException ) {
+  
     newTrackKeyPressed = false;
     track = new Track(null);
     skidLayer = createGraphics(width,height);
@@ -139,6 +139,7 @@ void mousePressed() {
   if( setCheckpoints ) {
     for( Tile t : track.tiles ) {
       if( t.isMouseOver ) {
+        
         if( t.checkpoint == null ) {
           Checkpoint c = new Checkpoint(t, cpm.getLowestAvailableCheckpointNr());
           t.checkpoint = c;

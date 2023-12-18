@@ -57,6 +57,14 @@ public class Car {
   
   public Explosion explosion = null;
 
+  float tyreSurfaceTemp = 0;
+  float tyreCarcasseTemp = 0;
+  
+  float tyreCooldown = 0.006f;
+  float tyreCarcasseFollow = 0.001;
+  
+  float tyreTempMaxDisplay = 200;
+  float tyreTempBaselineDisplay = 100;
 
   private ArrayList<CarStatus> stati = new ArrayList<CarStatus>();
 
@@ -118,7 +126,7 @@ public class Car {
 
 
   public float getSpeed() {
-
+    if( hasStatus(StatusType.DESTRUCTION) ) return 0;
     return lastMove.mag();
   }
 
@@ -292,6 +300,18 @@ public class Car {
     //pos.add(newDir);
 
 
+    // TYRE WEAR
+    
+    //tyreTemp += demand.add(thisSlide).magSq();
+    tyreSurfaceTemp += thisAcceleration.magSq() / delta * 50;
+    tyreSurfaceTemp += thisBreaking.magSq() / delta * 100 * getSpeed();
+    tyreSurfaceTemp += thisSteering.magSq() / 40 * delta;
+    tyreSurfaceTemp += thisSlide.magSq() / 30 * delta;
+    tyreSurfaceTemp -= tyreCooldown * 10 * delta;
+    tyreSurfaceTemp -= tyreSurfaceTemp * tyreCooldown * delta ;
+    if( tyreSurfaceTemp < 0 ) tyreSurfaceTemp = 0;
+    tyreCarcasseTemp = tyreCarcasseTemp + ((tyreSurfaceTemp-tyreCarcasseTemp) * tyreCarcasseFollow * delta);
+
     // EMIT SPARKS MAYBE ??
 
     if ( getSpeed() > sparksSpeed * deltaTime * deltaFactor) {
@@ -385,15 +405,30 @@ public class Car {
     tyreRLworldPos = new PVector(screenX(tyreXrl*tyreCollisionFactor, tyreYrl*tyreCollisionFactor), screenY(tyreXrl*tyreCollisionFactor, tyreYrl*tyreCollisionFactor ));
     tyreRRworldPos = new PVector(screenX(tyreXrr*tyreCollisionFactor, tyreYrr*tyreCollisionFactor), screenY(tyreXrr*tyreCollisionFactor, tyreYrr*tyreCollisionFactor ));
 
-    fill(palette.black);
+    //fill(palette.black);
+    
+    float tyreSurfaceTempOpa = (tyreSurfaceTemp+tyreCarcasseTemp) / tyreTempMaxDisplay;
+    tyreSurfaceTempOpa = (tyreSurfaceTempOpa * tyreSurfaceTempOpa * tyreSurfaceTempOpa);
+    tyreSurfaceTempOpa *= 255;
+    
+    /*
+    float tyreCarcasseTempOpa = tyreCarcasseTemp - tyreTempBaselineDisplay;
+    if( tyreCarcasseTempOpa < 0 ) tyreCarcasseTempOpa = 0;
+    tyreCarcasseTempOpa = tyreCarcasseTemp / (tyreTempMaxDisplay-tyreTempBaselineDisplay);
+    tyreCarcasseTempOpa = (tyreCarcasseTempOpa * tyreCarcasseTempOpa * tyreCarcasseTempOpa);
+    tyreCarcasseTempOpa *= 255;
+    */
+    fill(tyreSurfaceTempOpa);
+    
     stroke(palette.mainColorPrimary);
-    ellipseMode(CENTER);
+    //ellipseMode(CENTER);
 
     // draw front left tyre
     pushMatrix();
     translate(tyreXrl, tyreYrl);
     rotate(steering*15);
     shape(frontTyre, 0, 0);
+    
     if ( drawSkid ) {
       skidLayer.pushMatrix();
       skidLayer.translate(tyreXrl, tyreYrl);
@@ -409,6 +444,7 @@ public class Car {
     translate(tyreXrr, tyreYrr);
     rotate(steering*15);
     shape(frontTyre, 0, 0);
+    
     if ( drawSkid ) {
       skidLayer.pushMatrix();
       skidLayer.translate(tyreXrr, tyreYrr);
@@ -423,6 +459,7 @@ public class Car {
 
     shape(rearTyre, tyreXfl, tyreYfl);
     shape(rearTyre, tyreXfr, tyreYfr);
+    
     if ( drawSkid ) {
       skidLayer.shape( rearTyre, tyreXfl, tyreYfl, tireradiusF, tirewidthF);
       skidLayer.shape( rearTyre, tyreXfr, tyreYfr, tireradiusF, tirewidthF);

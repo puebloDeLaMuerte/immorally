@@ -36,6 +36,8 @@ void keyPressed(KeyEvent e) {
   //if( e.isAutoRepeat() ) return;
   
   char k = e.getKey();
+  
+  //if( k == 'ü' ) car.tyreTemp = 60;
     
   if( k == turnLeftKey ) turnLeftPressed = true;
   if( k == turnRightKey ) turnRightPressed = true;

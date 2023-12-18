@@ -402,7 +402,7 @@ public class DestructionCheckpoint extends Checkpoint {
     car.explosion = new Explosion(car.getCarComponents(), car.lastMove);
     
     for(int i = 0; i < 20; i++) {
-      sparks.releaseSpark(car.pos, car.lastMove);
+      sparks.releaseSpark(car.pos, new PVector(car.lastMove.x + random(-1,1), car.lastMove.y + random(-1,1)));
     }
   }
   

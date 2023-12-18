@@ -24,7 +24,7 @@ class DeltaPanel {
     this.isAbsoluteBest = isAbsoluteBest;
     delta = "";
     if( isAbsoluteBest ) {
-      fillColor = color(#8f19c1);
+      fillColor = palette.best;
       delta = "-"+deltaToBest;
     }
     else if( isPositiveValue ) {

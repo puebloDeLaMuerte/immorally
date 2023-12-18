@@ -86,9 +86,14 @@ public void raceLoop() {
     playYeah();*/
   }
   
-  //debugPrintFPS(width/2, height-100);
+  debugPrintFPS(width/2, height-100);
   dplott.draw();
-  
+  line( 50, 110, 50, 160);
+  line( 100, 110, 100, 160);
+  line( 150, 110, 150, 160);
+  line( 200, 110, 200, 160);
+  rect( 50, 120, 2*car.tyreSurfaceTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
+  rect( 50, 140, 2*car.tyreCarcasseTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
   //popMatrix();
   //popStyle();
 }

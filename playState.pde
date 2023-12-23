@@ -41,6 +41,7 @@ public void raceLoop() {
   car.updateStatus();
   calculateInput(car);
   car.updatePhysics();
+  car.calculatePenalty();
   
   pushStyle();
   //tint(0, 0, 0, 126);
@@ -89,6 +90,8 @@ public void raceLoop() {
   debugPrintFPS(width/2, height-100);
   
   dplott.draw();
+  
+  pushStyle();
   line( 50, 110, 50, 160);
   line( 150, 110, 150, 160);
   line( 250, 110, 250, 160);
@@ -98,6 +101,18 @@ public void raceLoop() {
   rect( 50, 140, 2*car.tyreCarcasseTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
   text( ""+(int)(car.tyreSurfaceTemp/10), 10,125);
   text( ""+(int)(car.tyreCarcasseTemp/10), 10,155);
+  
+  if( car.tyreTempPenalty > 0 ) {
+    stroke( 200,0,0 );
+    fill( 180, 20,20 );  
+  } else {
+    stroke( 0,0,200 );
+    fill( 20, 20,180 );
+  }
+  
+  rect( 50, 131, abs(car.tyreTempPenalty) * 100 , 5 );
+  
+  popStyle();
   //popMatrix();
   //popStyle();
 }

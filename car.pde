@@ -59,6 +59,8 @@ public class Car {
 
   float tyreSurfaceTemp = 0;
   float tyreCarcasseTemp = 0;
+  float tyreOptimalTemp = 55;
+  float tyreTempPenalty;
   
   float tyreCooldown = 0.006f;
   float tyreCarcasseFollow = 0.001;
@@ -325,6 +327,20 @@ public class Car {
       }
     }
   }
+  
+  
+  public void calculatePenalty() {
+    
+    float maxPenalty = 1.0; // Maximum penalty value
+    float penaltyRange = tyreOptimalTemp; // Range within which the penalty increases
+  
+    // Calculate the absolute difference from the optimal temperature
+    float tempDifference = tyreCarcasseTemp - tyreOptimalTemp;
+  
+    // Calculate the penalty as a ratio of the difference to the penalty range
+    tyreTempPenalty = min(tempDifference / penaltyRange, maxPenalty);  
+  }
+
 
 
   public ArrayList<PVector> getTyreWorldPos() {

@@ -264,6 +264,8 @@ public class Car {
     //slideFactor = 1-((thisSteering.mag())*0.04);  // works but is not logically right
     slideFactor += (thisSteering.mag() * 50f) ;
     slideFactor += (demand.mag() * 5f) ;
+    
+    slideFactor +=  slideFactor * abs(tyreTempPenalty);
 
     slideFactor /= delta; // don't know why, but thi seems to make sliding behave correctly over different frameRates
 

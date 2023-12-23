@@ -1,5 +1,9 @@
 public void raceLoop() {
   
+  if( car.hasStatus(StatusType.DESTRUCTION) ) {
+    println("explo");
+  }
+  
   //pushStyle();
   //pushMatrix();
   
@@ -44,11 +48,13 @@ public void raceLoop() {
   popStyle();
   cpm.drawCheckpoints();
   
-  
   //playEngine(car.getSpeed());
   playElectric(car.getSpeed());
+  
   //playElectric(car.getEngineLevel()*10);
   car.drawCar(skidLayer);
+  
+    // execution gets to  draw car but not to here on explosion. why?
   
   cpm.evaluateCheckpoints();
 
@@ -76,24 +82,22 @@ public void raceLoop() {
   text(cpm.getMedianTime(), 450, gsecond);
   
   
-  
   if ( resetKeyPressed ) {
     car = new Car( width/2, height/2, 0);
-    //iptrack = new Track();
-    /*skidLayer = createGraphics(width,height);
-    cpm.checkpoints = new ArrayList();
-    cpm.bestLapTime = 999999999999999999l;
-    playYeah();*/
   }
   
   debugPrintFPS(width/2, height-100);
+  
   dplott.draw();
   line( 50, 110, 50, 160);
-  line( 100, 110, 100, 160);
   line( 150, 110, 150, 160);
-  line( 200, 110, 200, 160);
+  line( 250, 110, 250, 160);
+  line( 350, 110, 350, 160);
+  line( 450, 110, 450, 160);
   rect( 50, 120, 2*car.tyreSurfaceTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
   rect( 50, 140, 2*car.tyreCarcasseTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
+  text( ""+(int)(car.tyreSurfaceTemp/10), 10,125);
+  text( ""+(int)(car.tyreCarcasseTemp/10), 10,155);
   //popMatrix();
   //popStyle();
 }

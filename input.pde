@@ -37,7 +37,7 @@ void keyPressed(KeyEvent e) {
   
   char k = e.getKey();
   
-  //if( k == 'ü' ) car.tyreTemp = 60;
+  if( k == 'ü' ) car.tyreCarcasseTemp = 260;
     
   if( k == turnLeftKey ) turnLeftPressed = true;
   if( k == turnRightKey ) turnRightPressed = true;

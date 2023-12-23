@@ -63,8 +63,8 @@ public class Car {
   float tyreCooldown = 0.006f;
   float tyreCarcasseFollow = 0.001;
   
-  float tyreTempMaxDisplay = 200;
-  float tyreTempBaselineDisplay = 100;
+  float tyreTempMaxDisplay = 105;
+  float tyreTempBaselineDisplay = 30;
 
   private ArrayList<CarStatus> stati = new ArrayList<CarStatus>();
 
@@ -126,7 +126,7 @@ public class Car {
 
 
   public float getSpeed() {
-    if( hasStatus(StatusType.DESTRUCTION) ) return 0;
+    if( hasStatus(StatusType.DESTRUCTION) ) return 0.01f;
     return lastMove.mag();
   }
 
@@ -305,7 +305,7 @@ public class Car {
     //tyreTemp += demand.add(thisSlide).magSq();
     tyreSurfaceTemp += thisAcceleration.magSq() / delta * 50;
     tyreSurfaceTemp += thisBreaking.magSq() / delta * 100 * getSpeed();
-    tyreSurfaceTemp += thisSteering.magSq() / 40 * delta;
+    tyreSurfaceTemp += thisSteering.magSq() / 30 * delta;
     tyreSurfaceTemp += thisSlide.magSq() / 30 * delta;
     tyreSurfaceTemp -= tyreCooldown * 10 * delta;
     tyreSurfaceTemp -= tyreSurfaceTemp * tyreCooldown * delta ;
@@ -407,10 +407,18 @@ public class Car {
 
     //fill(palette.black);
     
-    float tyreSurfaceTempOpa = (tyreSurfaceTemp+tyreCarcasseTemp) / tyreTempMaxDisplay;
-    tyreSurfaceTempOpa = (tyreSurfaceTempOpa * tyreSurfaceTempOpa * tyreSurfaceTempOpa);
+    float tyreSurfaceTempOpa = max(tyreSurfaceTemp,tyreCarcasseTemp);
+    println("ttopa mx: " + tyreSurfaceTempOpa);
+    tyreSurfaceTempOpa -= tyreTempBaselineDisplay;
+    if( tyreSurfaceTempOpa < 0 ) tyreSurfaceTempOpa = 0;
+    println("ttopa bl: " + tyreSurfaceTempOpa);
+    tyreSurfaceTempOpa = tyreSurfaceTempOpa / tyreTempMaxDisplay;
+    println("ttopa nr: " + tyreSurfaceTempOpa);
+    //tyreSurfaceTempOpa = (tyreSurfaceTempOpa * tyreSurfaceTempOpa);
+    println("ttopa sq: " + tyreSurfaceTempOpa);
     tyreSurfaceTempOpa *= 255;
-    
+    println("ttopa dr: " + tyreSurfaceTempOpa);
+    println();
     /*
     float tyreCarcasseTempOpa = tyreCarcasseTemp - tyreTempBaselineDisplay;
     if( tyreCarcasseTempOpa < 0 ) tyreCarcasseTempOpa = 0;

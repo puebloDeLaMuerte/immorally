@@ -76,7 +76,7 @@ public class Track {
           }
 
           PShape s = null;
-          if ( lines[l].equals("shape") ) { //<>//
+          if ( lines[l].equals("shape") ) {
             ArrayList<PVector> vecs = new ArrayList<PVector>();
             s = createShape();
             s.beginShape();

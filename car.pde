@@ -408,17 +408,12 @@ public class Car {
     //fill(palette.black);
     
     float tyreSurfaceTempOpa = max(tyreSurfaceTemp,tyreCarcasseTemp);
-    println("ttopa mx: " + tyreSurfaceTempOpa);
+    
     tyreSurfaceTempOpa -= tyreTempBaselineDisplay;
     if( tyreSurfaceTempOpa < 0 ) tyreSurfaceTempOpa = 0;
-    println("ttopa bl: " + tyreSurfaceTempOpa);
     tyreSurfaceTempOpa = tyreSurfaceTempOpa / tyreTempMaxDisplay;
-    println("ttopa nr: " + tyreSurfaceTempOpa);
-    //tyreSurfaceTempOpa = (tyreSurfaceTempOpa * tyreSurfaceTempOpa);
-    println("ttopa sq: " + tyreSurfaceTempOpa);
     tyreSurfaceTempOpa *= 255;
-    println("ttopa dr: " + tyreSurfaceTempOpa);
-    println();
+    
     /*
     float tyreCarcasseTempOpa = tyreCarcasseTemp - tyreTempBaselineDisplay;
     if( tyreCarcasseTempOpa < 0 ) tyreCarcasseTempOpa = 0;

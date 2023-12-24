@@ -1,8 +1,5 @@
 public void raceLoop() {
   
-  if( car.hasStatus(StatusType.DESTRUCTION) ) {
-    println("explo");
-  }
   
   //pushStyle();
   //pushMatrix();
@@ -66,6 +63,7 @@ public void raceLoop() {
   int gfirst = 70;
   int gsecond = 100;
 
+  pushStyle();
   textSize(25);
   fill(palette.darkGlow);
   text("track:", 50,gfirst);
@@ -82,37 +80,65 @@ public void raceLoop() {
   fill(palette.mainColorSecondary);
   text(cpm.getMedianTime(), 450, gsecond);
   
+  fill(palette.darkGlow);
+  text("tires:", width-200, gfirst);
+  if( car.tyreTempPenalty > 0.3 ) {
+    if( car.tyreTempPenalty > 0.8 && frameCount % 20 < 10) {
+      fill(0);
+    } else {
+      fill(255);
+    }
+    text("hot", width-200, gsecond);
+  } else if(car.tyreTempPenalty < -0.3) {
+    if( car.tyreTempPenalty < -0.8 && frameCount % 20 < 10) {
+      fill(0);
+    } else {
+      fill(palette.mainColorPrimary);
+    }
+    text("cold", width-200, gsecond);  
+  }
+  else {
+    fill(palette.mainColorSecondary);
+    text("optimal", width-200, gsecond);  
+  }
+  popStyle();
+  
   
   if ( resetKeyPressed ) {
     car = new Car( width/2, height/2, 0);
   }
   
-  debugPrintFPS(width/2, height-100);
+  if( drawFrameRate ) debugPrintFPS(width/2-50, height-100);
   
   dplott.draw();
   
-  pushStyle();
-  line( 50, 110, 50, 160);
-  line( 150, 110, 150, 160);
-  line( 250, 110, 250, 160);
-  line( 350, 110, 350, 160);
-  line( 450, 110, 450, 160);
-  rect( 50, 120, 2*car.tyreSurfaceTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
-  rect( 50, 140, 2*car.tyreCarcasseTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
-  text( ""+(int)(car.tyreSurfaceTemp/10), 10,125);
-  text( ""+(int)(car.tyreCarcasseTemp/10), 10,155);
+  if( drawTyreInfo ) {
+      
+    pushStyle();
+    textSize(25);
+    line( 50, 110, 50, 160);
+    line( 150, 110, 150, 160);
+    line( 250, 110, 250, 160);
+    line( 350, 110, 350, 160);
+    line( 450, 110, 450, 160);
+    rect( 50, 120, 2*car.tyreSurfaceTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
+    rect( 50, 140, 2*car.tyreCarcasseTemp , 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
+    text( ""+(int)(car.tyreSurfaceTemp/10), 10,125);
+    text( ""+(int)(car.tyreCarcasseTemp/10), 10,155);
   
-  if( car.tyreTempPenalty > 0 ) {
-    stroke( 200,0,0 );
-    fill( 180, 20,20 );  
-  } else {
-    stroke( 0,0,200 );
-    fill( 20, 20,180 );
+    if( car.tyreTempPenalty > 0 ) {
+      stroke( 200,0,0 );
+      fill( 180, 20,20 );  
+    } else {
+      stroke( 0,0,200 );
+      fill( 20, 20,180 );
+    }
+    rect( 50, 131, abs(car.tyreTempPenalty) * 100 , 5 );
+    popStyle();
+    
   }
   
-  rect( 50, 131, abs(car.tyreTempPenalty) * 100 , 5 );
   
-  popStyle();
   //popMatrix();
   //popStyle();
 }

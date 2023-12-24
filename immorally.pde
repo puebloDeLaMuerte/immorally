@@ -34,6 +34,9 @@ int noiseMapSizeFactor = 20;
 ArrayList<String> trackFiles;
 int trackIndex = 0;
 
+boolean drawTyreInfo = false;
+boolean drawFrameRate = false;
+
 enum State { RACE, TRACK_SELECT, INTRO };
 State gameState = State.INTRO;
 

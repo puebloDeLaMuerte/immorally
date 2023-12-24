@@ -1,6 +1,7 @@
 public void debugPrintFPS(int x, int y ) {
   pushStyle();
   //fill(255);
+  textSize(25);
   fill(palette.darkGlow);
   text( frameRate, x,y);
   popStyle();

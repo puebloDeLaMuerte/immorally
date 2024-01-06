@@ -17,5 +17,5 @@ public class Palette {
   int destruction = color(200,0,20);
   
   int best = #8f19c1;
-   
+  
 }

@@ -44,9 +44,15 @@ class Explosion {
   
   
   public void drawExplosion(PGraphics gr, float opacity) {
+    
+    if( gr != g ) {
+      gr.beginDraw();  
+    }
+    
     for (PShapeInfo component : components) {
-      gr.beginDraw();
+      
       gr.pushMatrix();
+      gr.pushStyle();
       gr.stroke(palette.mainColorPrimary, opacity);
       
       PVector explodedPosition = component.position.copy();
@@ -55,9 +61,14 @@ class Explosion {
   
       gr.shape(component.shape);
   
+      gr.popStyle();
       gr.popMatrix();
-      gr.endDraw();
+      
+    }
+    
+    if( gr != g ) {
+      gr.endDraw();  
     }
   }
-  
+    
 }

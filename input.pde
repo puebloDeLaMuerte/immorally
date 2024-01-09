@@ -62,6 +62,8 @@ void keyPressed(KeyEvent e) {
   if( k == '3' ) frameRate(30);
   if( k == '4' ) drawTyreInfo = !drawTyreInfo;
   if( k == '5' ) drawFrameRate = !drawFrameRate;
+  
+  if( k == '0' ) testSendHighscore();
 }
 
 

@@ -15,7 +15,7 @@ public class Car {
   public PVector tyreRRworldPos = new PVector(0, 0);
   public ArrayList<PVector> tyreWorldPos;
 
-  private float maxSpeed = 8;
+  //private float maxSpeed = 8;
 
   private float steering;
   private float maxSteering = 0.03;
@@ -29,7 +29,7 @@ public class Car {
   private float breakPower = 0.018;
   private float maxBreaking = 0.035;
 
-  private float carFriction = 0.0045;
+  private float carFriction = 0.0035f;// this has been a known classic for the friction constant: 0.0045;
 
   private float maxGripTotal = 0.08;
   private boolean maxGripExceeded;
@@ -303,7 +303,6 @@ public class Car {
     pos.add(scaledNewDir);
     //pos.add(newDir);
 
-
     // TYRE WEAR
     
     //tyreTemp += demand.add(thisSlide).magSq();
@@ -333,11 +332,11 @@ public class Car {
   
   public void calculatePenalty() {
     
-    float maxPenalty = 1.0; // Maximum penalty value
+    float maxPenalty = 1.2; // Maximum penalty value
     float penaltyRange = tyreOptimalTemp; // Range within which the penalty increases
   
     // Calculate the absolute difference from the optimal temperature
-    float tempDifference = tyreCarcasseTemp - tyreOptimalTemp;
+    float tempDifference = (tyreCarcasseTemp) - tyreOptimalTemp;
   
     // Calculate the penalty as a ratio of the difference to the penalty range
     tyreTempPenalty = min(tempDifference / penaltyRange, maxPenalty);  

@@ -18,4 +18,5 @@ public class Palette {
   
   int best = #8f19c1;
   
+  int geilOrange = color(200,200,50);
 }

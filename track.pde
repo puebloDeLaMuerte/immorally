@@ -1,5 +1,6 @@
-import micycle.pgs.*;
+import micycle.pgs.*; //<>// //<>//
 import java.util.*;
+import java.security.MessageDigest;
 
 float ofst;
 
@@ -53,7 +54,7 @@ public class Track {
       l++;
       trackName = lines[0];
       println("track name: " + trackName);
-      
+
       while ( !lines[l].equals("/track") ) {
         l++;
         if ( lines[l].equals("tile") ) {
@@ -120,10 +121,10 @@ public class Track {
         }
       }
     }
-    
+
     cpm.sortCheckpoints();
     //cpm.checkpoints.get(0).contact(car);
-    
+
     return true;
   }
 
@@ -173,9 +174,9 @@ public class Track {
 
 
   public void updateTrack() {
-    
+
     if ( !isGenerated ) {
-      
+
       playStatic(true);
       car = new Car(width/2, height/2, 0);
       String gens = "generating...";
@@ -216,9 +217,51 @@ public class Track {
 
 
 
+  public String generateTrackDataString() {
+
+    StringBuilder data = new StringBuilder();
+    //data.append(trackName); // Include the track name
+    for (Tile tile : tiles) {
+      for (int i = 0; i < tile.shape.getVertexCount(); i++) {
+        PVector vertex = tile.shape.getVertex(i);
+        data.append(vertex.x).append(",").append(vertex.y).append(";");
+        if ( tile.checkpoint != null ) {
+          data.append(tile.checkpoint.getCheckpointData());
+        }
+      }
+    }
+    return data.toString();
+  }
+
+
+  public String computeSHA256Hash(String input) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(input.getBytes("UTF-8"));
+      StringBuffer hexString = new StringBuffer();
+      for (int i = 0; i < hash.length; i++) {
+        String hex = Integer.toHexString(0xff & hash[i]);
+        if (hex.length() == 1) hexString.append('0');
+        hexString.append(hex);
+      }
+      return hexString.toString();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+  
+  
+  public String getSHA256Hash() {
+    return computeSHA256Hash(generateTrackDataString());
+  }
+
+
+
   public PGraphics drawTrack(PGraphics gr) {
     println("drawTrack");
-    if ( !hasTopographyUpdate ) return gr; //<>//
+    if ( !hasTopographyUpdate ) return gr;
     gr.beginDraw();
     gr.background(0);
     for (Tile t : tiles ) t.drawTile(gr);
@@ -237,13 +280,13 @@ public class Track {
       if ( PVector.sub( t.center, car.pos ).magSq() < t.detectRadiusSquared ) { /// only check tiles that are close to the car
 
         //if ( PGS_ShapePredicates.containsPoint(t.shape, car.pos) ) {
-        
+
         List twpcontains = PGS_ShapePredicates.containsPoints(t.shape, car.getTyreWorldPos());
         if ( twpcontains.contains(true) ) {
           t.drawHighlight(1f);
           //for(Tile n : t.neighbours) n.drawHighlight();
           if ( t.checkpoint != null ) {
-            
+
             t.checkpoint.contact(car);
           }
         } else if ( t.hasHighlight() ) {
@@ -251,8 +294,6 @@ public class Track {
         }
       }
     }
-    
-    
   }
 
 
@@ -307,7 +348,7 @@ public class Tile {
   public double area;
   public float circumRadius;
   public float detectRadiusSquared;
-  
+
   public color myColor;
 
   public ArrayList<Tile> neighbours = new ArrayList<Tile>();
@@ -358,7 +399,7 @@ public class Tile {
   private void setup( PShape s ) {
 
     if ( s == null ) {
-      println("s is null"); //<>//
+      println("s is null");
     }
 
     myColor = color( random(40, 200) );
@@ -402,7 +443,7 @@ public class Tile {
     }
 
     center = new PVector( minX + ((maxX - minX)/2f), minY + ((maxY - minY)/2f) );
-    
+
     circumRadius = ( maxX - minX ) / 2;
 
     detectRadiusSquared = (circumRadius * 1.5) * (circumRadius * 1.5);
@@ -446,7 +487,7 @@ public class Tile {
 
     shape(shape);
     //shape.enableStyle();
-    
+
     // draw circumCircle for debug
     //stroke(255);
     //ellipse( center.x, center.y, circumRadius*2, circumRadius*2 );
@@ -462,7 +503,6 @@ public class Tile {
     shape.stroke(palette.brightBlack);
     gr.shape(shape);
     shape.disableStyle();
-    
   }
 
 

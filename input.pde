@@ -1,3 +1,4 @@
+
 char accelerateKey = 'a';
 boolean accelKeyPressed;
 
@@ -30,10 +31,26 @@ char printDebugInfoKey = 'p';
   float accelInput = 0;
   float breakInput = 0;
 
+String userInputString = "";
+String passInputString = "";
+boolean userPassSwitch = true;
 
 void keyPressed(KeyEvent e) {
   
   //if( e.isAutoRepeat() ) return;
+  
+  if( gameState == State.USER_LOGIN ) {
+    
+    if( userPassSwitch ) {
+      userInputString = addSubtractInputString( userInputString, e);
+    } else {
+      passInputString = addSubtractInputString( passInputString, e);
+    }
+    
+    if( keyCode == TAB ) userPassSwitch = !userPassSwitch;
+    
+    return;
+  }
   
   char k = e.getKey();
   
@@ -63,9 +80,20 @@ void keyPressed(KeyEvent e) {
   if( k == '4' ) drawTyreInfo = !drawTyreInfo;
   if( k == '5' ) drawFrameRate = !drawFrameRate;
   
-  if( k == '0' ) testSendHighscore();
+  if( k == '9' ) testRegisterTrack();
+  if( k == '0' ) testSendHighscore(456999);
 }
 
+
+String addSubtractInputString( String stringToAlter, KeyEvent e ) {
+  
+  if ( keyCode == BACKSPACE && stringToAlter.length() > 0) {
+        stringToAlter = stringToAlter.substring(0, stringToAlter.length() - 1);
+    } else if( !e.isAutoRepeat() && key != CODED && key != RETURN && key != ENTER && keyCode != BACKSPACE && key != ' ' && keyCode != TAB ) {
+      stringToAlter = stringToAlter + e.getKey();
+    }
+  return stringToAlter;
+}
 
 void keyReleased(KeyEvent e) {
   

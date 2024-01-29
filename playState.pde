@@ -80,6 +80,10 @@ public void raceLoop() {
   fill(palette.mainColorSecondary);
   text(cpm.getMedianTime(), 450, gsecond);
   
+  String timeString = cpm.getTimeElapsed();
+  fill(palette.mainColorPrimary);
+  text(timeString, width/2-textWidth(timeString)/2, gsecond);
+  
   fill(palette.darkGlow);
   text("tires:", width-200, gfirst);
   if( car.tyreTempPenalty > 0.3 ) {

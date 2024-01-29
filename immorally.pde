@@ -9,6 +9,10 @@ Track track;
 Car car;
 Sparks sparks;
 
+User user;
+
+String apiKey = "Schnablerm1Schnabler";
+
 PGraphics skidLayer;
 PGraphics trackLayer;
 
@@ -39,7 +43,7 @@ boolean drawTyreInfo = false;
 boolean drawFrameRate = false;
 
 enum State {
-  RACE, TRACK_SELECT, INTRO
+  RACE, USER_LOGIN, INTRO
 };
 State gameState = State.INTRO;
 
@@ -123,8 +127,8 @@ void draw() {
   case RACE:
     raceLoop();
     break;
-  case TRACK_SELECT:
-    trackSelectLoop();
+  case USER_LOGIN:
+    userLoginLoop();
     break;
   case INTRO:
     introLoop();

@@ -60,6 +60,19 @@ public class CheckpointManager {
     long seconds = (long)totalSeconds % 60l;
     return String.format("%02d : %02d : %03d", minutes, seconds, milli);
   }
+  
+  public String getTimeElapsed() {
+    
+    if( checkpoints == null || checkpoints.size() == 0 ) return "--:--:--";
+    
+    Checkpoint c = checkpoints.get(0);
+    long t = (long)(millis()-c.checkTime);
+    long totalSeconds = t / 1000l;
+    long milli = (long)t % 1000l;
+    long minutes = (long)(totalSeconds % 3600l) / 60l;
+    long seconds = (long)totalSeconds % 60l;
+    return String.format("%02d : %02d : %03d", minutes, seconds, milli);
+  }
 
 
   public String getCurrentDeltaToBest() {
@@ -173,6 +186,7 @@ public class CheckpointManager {
     boolean isAbsolute = false;
     if ( thisLapTime < bestLapTime ) {
       bestLapTime = thisLapTime;
+      testSendHighscore((int)bestLapTime);
       playYeah();
       isAbsolute = true;
     }

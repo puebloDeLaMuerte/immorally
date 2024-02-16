@@ -12,6 +12,7 @@ public void raceLoop() {
   rect( car.getTyreWorldPos().get(3).x, car.getTyreWorldPos().get(3).y, 2,2 );
   */
   
+  handleLightning();
   
   updateSkidLayer();
   
@@ -80,9 +81,16 @@ public void raceLoop() {
   fill(palette.mainColorSecondary);
   text(cpm.getMedianTime(), 450, gsecond);
   
+  // draw lap nr
+  fill(palette.darkGlow);
+  text("Lap:", width/2 - 115, gfirst);
+  fill(palette.white);
+  text( cpm.lapCount, (width/2) - textWidth(""+cpm.lapCount), gfirst);
+  
+  // draw lapTime
   String timeString = cpm.getTimeElapsed();
-  fill(palette.mainColorPrimary);
-  text(timeString, width/2-textWidth(timeString)/2, gsecond);
+  drawLaptime((width/2)-120,gsecond, timeString);
+  //text(timeString, width/2-textWidth(timeString)/2, gsecond);
   
   fill(palette.darkGlow);
   text("tires:", width-200, gfirst);
@@ -146,6 +154,24 @@ public void raceLoop() {
   //popMatrix();
   //popStyle();
 }
+
+
+void drawLaptime(int x, int y, String timeString) {
+  
+  fill(palette.mainColorPrimary);
+  
+  //x -= textWidth(timeString)/2;
+  
+  // Iterate over each character in the timeString
+  for (int i = 0; i < timeString.length(); i++) {
+    char c = timeString.charAt(i);
+    // Draw the character at the current position
+    text(c, x, y);
+    // Move x to the right by the width of the character
+    x += textWidth(c);
+  }
+}
+  
 
 
 

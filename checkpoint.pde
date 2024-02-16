@@ -2,6 +2,7 @@ public class CheckpointManager {
 
   ArrayList<Checkpoint> checkpoints = new ArrayList();
   ArrayList<Checkpoint> specialCheckpoints = new ArrayList();
+  ArrayList<Checkpoint> allCheckpoints = null;
 
   ArrayList<Long> allLapTimes = new ArrayList();
   long medianTime = 0;
@@ -18,6 +19,16 @@ public class CheckpointManager {
     checkpoints = new ArrayList();
     specialCheckpoints = new ArrayList();
     bestLapTime = 999999999999999999l;
+  }
+  
+  
+  public ArrayList<Checkpoint> getAllCheckpoints() {
+    if( allCheckpoints == null ) {
+      allCheckpoints = new ArrayList<Checkpoint>();
+      allCheckpoints.addAll(checkpoints);
+      allCheckpoints.addAll(specialCheckpoints);
+    }
+    return allCheckpoints;
   }
 
 

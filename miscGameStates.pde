@@ -4,6 +4,9 @@ float opa2 = 0;
 
 int enterCooldownFrame = -1;
 
+
+
+
 public void userLoginLoop() {
 
   pushStyle();
@@ -23,7 +26,7 @@ public void userLoginLoop() {
   // username title
 
   if ( userPassSwitch && frameCount%60 < 30 ) {
-    fill( palette.mainColorPrimary );
+    fill( palette.white );
   } else fill( palette.mainColorSecondary);
   t = "username:";
   text(t, width/2-textWidth(t)/2, height/2+80);
@@ -48,8 +51,8 @@ public void userLoginLoop() {
   // password title
 
   if ( !userPassSwitch && frameCount%60 < 30 ) {
-    fill( palette.mainColorPrimary );
-  } else fill( palette.mainColorSecondary );
+    fill( palette.white );
+  } else fill( palette.mainColorPrimary );
   textSize(20);
   t = "password:";
   text(t, width/2-textWidth(t)/2, height/2+160);

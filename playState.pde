@@ -177,13 +177,13 @@ void drawLaptime(int x, int y, String timeString) {
 
 public void updateDelta() {
   
-  deltaTime = (1000 / frameRate);
+  //deltaTime = (1000 / frameRate);
   
-  /*
+  
   int millis = millis();
   deltaTime = millis - lastFrameMillis;
   lastFrameMillis = millis;
-  */
+  
   delta = deltaTime * deltaFactor;
 }
 

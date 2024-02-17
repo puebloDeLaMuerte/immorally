@@ -10,6 +10,8 @@ public class Palette {
   
   int darkGlow = color(0,0,255);
   
+  int darkestBlue = #071A74;
+  
   int powerDownHighlight = #e98c09;
   int powerDownLowlight = #e0a654;
   //int carBasicColor = color();

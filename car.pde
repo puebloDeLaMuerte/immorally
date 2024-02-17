@@ -29,7 +29,7 @@ public class Car {
   private float breakPower = 0.018;
   private float maxBreaking = 0.035;
 
-  private float carFriction = 0.0035f;// this has been a known classic for the friction constant: 0.0045;
+  private float carFriction = 0.0040f;// this has been a known classic for the friction constant: 0.0045;
 
   private float maxGripTotal = 0.08;
   private boolean maxGripExceeded;

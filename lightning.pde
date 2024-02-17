@@ -1,5 +1,5 @@
 Lightning lightning;
-float chanceOfLightning = 0.02f;
+float chanceOfLightning = 0.01f;
 
 
 class Lightning {
@@ -11,8 +11,11 @@ class Lightning {
 
   float reChargeChance = 0.1;
 
-  float branchChance = 0.12;//0.3
-  int ticksPerFrame = 4;//6
+  float branchChance = 0.18;//0.3
+  int maxBranches = 70;
+  int ticksPerFrame = 3;//6
+
+  int bigLightningThreshold = 6000;
 
   Lightning() {
 
@@ -40,14 +43,31 @@ class Lightning {
       if ( !branch.isDischarged ) {
         allAreDischarged = false;
       }
-
-      if ( !isPathfindingComplete && branch.isGrowing && random(1) < branchChance * ticksPerFrame) {
-        // Create a new branch from the current branch's path
-        newBranches.add(new Branch(this, new ArrayList<PVector>(branch.points)));
+      
+      if( branches.size() < maxBranches  &&  !isPathfindingComplete  &&  branch.isGrowing) {
+        if (random(1) < branchChance * ticksPerFrame) {
+          // Create a new branch from the current branch's path
+          newBranches.add(new Branch(this, new ArrayList<PVector>(branch.points)));
+        }  
       }
     }
+    
     isDischarged = allAreDischarged;
-    branches.addAll(newBranches);
+    
+    if( branches.size() < maxBranches ) {
+      branches.addAll(newBranches);  
+    }
+    
+  }
+  
+  
+  public int getTotalPointsNumber() {
+    
+    int segs = 0;
+    for( Branch b : branches ) {
+      segs += b.points.size();
+    }
+    return segs;
   }
 }
 
@@ -181,15 +201,15 @@ class Branch {
   }
 
   void startDischarge() {
-    strokeAlpha = 220;
-    strokeWeight = 4;
+    strokeAlpha = 250;
+    strokeWeight = 6;
   }
 
   void display() {
 
     if ( isDischarged ) return;
 
-    stroke(red(palette.darkGlow), green(palette.darkGlow), blue(palette.darkGlow), strokeAlpha);
+    stroke(red(palette.darkestBlue), green(palette.darkestBlue), blue(palette.darkestBlue), strokeAlpha);
     //stroke(255,255,255, strokeAlpha);
     strokeWeight(strokeWeight);
     noFill();
@@ -222,6 +242,7 @@ void handleLightning() {
     lightning.draw();  
   
     if( lightning.isDischarged ) {
+      println("lightning: branches: " + lightning.branches.size() + " - points: " + lightning.getTotalPointsNumber());
       lightning = null;
     }
   } 

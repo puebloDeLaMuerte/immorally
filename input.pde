@@ -81,7 +81,6 @@ void keyPressed(KeyEvent e) {
   if( k == '5' ) drawFrameRate = !drawFrameRate;
   
   if( k == '9' ) testRegisterTrack();
-  if( k == '0' ) testSendHighscore(456999);
 }
 
 

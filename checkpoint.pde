@@ -4,12 +4,19 @@ public class CheckpointManager {
   ArrayList<Checkpoint> specialCheckpoints = new ArrayList();
   ArrayList<Checkpoint> allCheckpoints = null;
 
-  ArrayList<Long> allLapTimes = new ArrayList();
+  long maxLapTime = 999999999999999999l;
+
+  ArrayList<Lap> allLaps = new ArrayList();
+  
+  long bestLapTime = maxLapTime;
+  int currentBestLapTotalNr = -1;
+  
   long medianTime = 0;
   long lastMedianTime = 0;
-  long bestLapTime = 999999999999999999l;
+  
   long currentDeltaToBest;
   long currentDeltaToMedian;
+  
   int penalty;
   int lapCount = 0;
   int validLapCount = 0;
@@ -51,6 +58,24 @@ public class CheckpointManager {
     }
     return newInt;
   }
+  
+  
+  public double getCurrentBestLapTimeAsDouble() {
+    
+    for(int i = allLaps.size()-1; i > 0; i--) {
+      Lap l = allLaps.get(i);
+      if( l.getTotalLapNr() == currentBestLapTotalNr ) {
+        return l.getLapTimeAsDouble();
+      }
+    }
+    return maxLapTime;
+  }
+  
+  public int getCurrentBestLapTimeAsInt() {
+    return (int)getCurrentBestLapTimeAsDouble();
+  }
+  
+  
 
   public String getMedianTime() {
 
@@ -157,52 +182,71 @@ public class CheckpointManager {
    }
    */
 
-  public void newLap() { //<>//
+  public void newLap() {
     println("newLap");
 
-    boolean allchecked = true;
+    boolean allchecked = true; //<>//
     for ( Checkpoint cp : checkpoints ) {
       if ( !cp.checked ) allchecked = false;
     }
 
     long thisLapTime = checkpoints.get(0).secondCheckTime - checkpoints.get(0).checkTime;
     lapCount++;
-    currentDeltaToBest = thisLapTime - bestLapTime;
-
-    /*
-    for( Checkpoint cp : checkpoints ) {
-     cp.newLap();
-     }
-     */
+    
+    Lap thisLap = new Lap(new Long(thisLapTime), lapCount, allchecked); 
+    allLaps.add( thisLap );
+    
 
     // IS IT A VALID LAP?
     if ( !allchecked ) {
+      
+      thisLap.setIsValid(false);
+      thisLap.finalize();
       playBoo();
+      
       for ( Checkpoint cp : checkpoints ) {
         cp.newLap();
       }
       return;
-    } //<>//
+    }
     validLapCount++;
 
+    thisLap.setIsValid(true);
+    thisLap.setValidLapNr(validLapCount);
+
     lastMedianTime = medianTime;
-    allLapTimes.add(new Long(thisLapTime));
+    
+    currentDeltaToBest = thisLapTime - bestLapTime;
+    
+    // calculate current median time
+    
     long ats = 0;
-    for (Long t : allLapTimes) {
-      ats += t.l;
+    for (Lap lap : allLaps) {
+      if( lap.isValid() ) {
+        ats += lap.getLapTimeAsDouble();  
+      }
     }
     medianTime = ats / (long)validLapCount;
     currentDeltaToMedian = medianTime - lastMedianTime;
+    thisLap.medianTime = new Long( medianTime );
+    
+    // calculate isPersonalBest
 
-    boolean isAbsolute = false;
-    if ( thisLapTime < bestLapTime ) {
+    boolean isPersonalBest = false;
+    if ( thisLap.getLapTimeAsDouble() < getCurrentBestLapTimeAsDouble() ) {
       bestLapTime = thisLapTime;
-      testSendHighscore((int)bestLapTime);
+      currentBestLapTotalNr = thisLap.getTotalLapNr();
+      
+      thread("sendHighscore");
+      
       playYeah();
-      isAbsolute = true;
+      isPersonalBest = true;
     }
+    thisLap.setIsPersonalBestThisSession(isPersonalBest);
 
-    deltaPanel.showPanel( getCurrentDeltaToBest(), getCurrentDeltaToMedian(), currentDeltaToBest >= 0d, isAbsolute, false );
+    thisLap.finalize();
+
+    deltaPanel.showPanel( getCurrentDeltaToBest(), getCurrentDeltaToMedian(), currentDeltaToBest >= 0d, isPersonalBest, false );
 
     for ( Checkpoint cp : checkpoints ) {
       cp.newLap();
@@ -210,6 +254,7 @@ public class CheckpointManager {
     for( Checkpoint scp : specialCheckpoints ) {
       scp.newLap();
     }
+    playLap();
   }
 
 
@@ -237,6 +282,101 @@ public class CheckpointManager {
 
 
 
+
+
+public class Lap {
+  
+  private boolean isFinalized = false;
+  
+  private boolean isValid = false;
+  private boolean isPersonalBestThisSession = false;
+  private Long lapTime;
+  private Long medianTime;
+  private Long bestTime;
+  private int totalLapNr;
+  private int validLapNr;
+  
+  public Lap(Long lapTime, int totalLapNr, boolean isValid) {
+    this.isValid = isValid;
+    this.lapTime = lapTime;
+    this.totalLapNr = totalLapNr;
+  }
+  
+  public void finalize() {
+    isFinalized = true;
+  }
+  
+  public void setValidLapNr(int vlnr) {
+    if( !isFinalized ) {
+      this.validLapNr = vlnr;
+    }
+  }
+  
+  public int getValidLapNr() {
+    return validLapNr;
+  }
+  
+  public int getTotalLapNr() {
+    return totalLapNr;
+  }
+  
+  
+  public Long getLapTime() {
+    return lapTime;
+  }
+  
+  public double getLapTimeAsDouble() {
+    return lapTime.l;
+  }
+  
+  public void setIsValid(boolean valid) {
+    if( !isFinalized ) {
+      isValid = valid;
+    }
+  }
+  
+  public boolean isValid() {
+    return isValid;    
+  }
+  
+  public void setMedianTime(Long mt) {
+    if( !isFinalized ) {
+      medianTime = mt;
+    }
+  }
+  
+  public Long getMedianTime() {
+    return medianTime;
+  }
+  
+  public void setBestTime(Long bt) {
+    if( !isFinalized ) {
+      bestTime = bt;
+    }
+  }
+  
+  public Long getBestTime() {
+    return bestTime;
+  }
+  
+  public void setIsPersonalBestThisSession(boolean b) {
+    if( !isFinalized ) {
+      isPersonalBestThisSession = b;
+    }
+  }
+  
+  public boolean getIsPersonalBestThisSession() {
+    return isPersonalBestThisSession;
+  }
+}
+
+
+
+
+
+
+
+
 public class Long {
   double l;
   public Long(long l) {
@@ -247,6 +387,9 @@ public class Long {
     l += a;
   }
 }
+
+
+
 
 
 
@@ -324,7 +467,6 @@ public class Checkpoint {
     left = false;
     checkTime = -1;
     secondCheckTime = -1;
-    playLap();
   }
 
 

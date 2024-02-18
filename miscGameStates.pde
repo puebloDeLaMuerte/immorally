@@ -19,6 +19,11 @@ public void userLoginLoop() {
   if ( user == null ) {
     user = userFromFile( dataPath("user.txt") );
     userInputString = user.username;
+    
+    if( userInputString != null && userInputString.length() > 0 && (passInputString == null || passInputString.length() == 0) ) {
+      userPassSwitch = false;
+    }
+    
   } else if ( !user.isVerified() ) {
     t = "login error: " + user.latestServerResponse;
     //text(t, width/2-textWidth(t)/2, height/2+40);
@@ -198,9 +203,14 @@ public void introLoop() {
 
 public void loadingLoop() {
   
-  String gens = "loading..."; //<>//
+  String gens = "loading...";
   textSize(40);
   fill(palette.mainColorSecondary);
+  if( frameCount % 80 > 40 ) {
+    fill(palette.mainColorPrimary);
+  } else {
+    fill(palette.darkGlow);
+  }
   text(gens, width/2 -textWidth(gens)/2, height/2);
   
   if( isAudioInitialized ) {

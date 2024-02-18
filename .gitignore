@@ -5,3 +5,6 @@ linux-amd64
 linux-arm
 windows-amd64
 *downloaded_assets*
+*project_files*
+*project_files/*
+*.asd

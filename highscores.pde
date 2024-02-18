@@ -1,5 +1,5 @@
 
-void testSendHighscore(int lapTime) {
+void sendHighscore() {
   
   println("testing highscore service ...");
   
@@ -7,12 +7,13 @@ void testSendHighscore(int lapTime) {
   String url = "http://immorally.mitgutemerfolg.org/api/submit_hotlap.php";
 
   // Creating a new POST request
-  PostRequest post = new PostRequest(url); //<>//
+  PostRequest post = new PostRequest(url);
   post.addData("HTTP_AUTHORIZATION", user.sessionToken);
   post.addData("HTTP_API_KEY", apiKey);
   // Adding data to the request
   //post.addData("track_id", "456"); // Replace with the actual track ID
-  post.addData("lap_time", ""+lapTime); // Replace with the actual lap time
+  int lt = cpm.getCurrentBestLapTimeAsInt();
+  post.addData("lap_time", ""+ lt); // Replace with the actual lap time
   post.addData("track_hash", track.getSHA256Hash() );
   // Sending the request
   post.send();

@@ -51,7 +51,7 @@ void initAudio() {
   yeah = new SoundFile(this, audioFolder+"496087__dastudiospr__male-yeah.wav");
   //boo = new SoundFile(this, audioFolder+"boo.wav");     
   boo = new SoundFile(this, audioFolder+"514159__edwardszakal__distorted-beep-incorrect.mp3");     
-  boo.amp(0.9);
+  boo.amp(0.4);
   disconnect = new SoundFile(this, audioFolder+"Disconnect.wav");
   love = new SoundFile(this, audioFolder+"Pips_Auto 1 .mp3");
 
@@ -61,7 +61,7 @@ void initAudio() {
   pipautotracks = LoadPipAuto(audioFolder);
   thunder = loadSoundFilesFromFolder( audioFolder+"thunder" );
   
-  isAudioInitialized = true; //<>//
+  isAudioInitialized = true;
 }
 
 
@@ -199,7 +199,9 @@ void playDing() {
 
 
 void playBoo() {
-  boo.play();
+  if( !boo.isPlaying() ) {
+    boo.play();  
+  }
 }
 
 

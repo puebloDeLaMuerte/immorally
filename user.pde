@@ -1,49 +1,53 @@
 
 public class User {
 
-  String userName;
+  String username;
   String password;
   String sessionToken;
   String latestServerResponse;
 
-  public User( String userName, String password ) {
-    this.userName = userName;
+  public User( String username ) {
+    this.username = username;
+  }
+
+  public User( String username, String password ) {
+    this.username = username;
     this.password = password;
-    sessionToken = verifyUser(userName, password);
+    thread("verifyUser");
   }
 
   public boolean isVerified() {
     return sessionToken != null && sessionToken.length() > 0;
   }
+}
 
 
-  String verifyUser(String username, String password) { //<>//
-    println("try verify user with server");
-    try {
-      PostRequest post = new PostRequest("http://immorally.mitgutemerfolg.org/api/login.php");
-      post.addData("username", username);
-      post.addData("password", password);
-      post.send(); // Send the request
+public void verifyUser() {
 
-      // Get the response
-      String response = post.getContent();
-      latestServerResponse = response;
-      //println( "user login response: " + response );
+  println("try verify user with server");
+  try {
+    PostRequest post = new PostRequest("http://immorally.mitgutemerfolg.org/api/login.php");
+    post.addData("username", user.username);
+    post.addData("password", user.password);
+    post.send(); // Send the request
 
-      JSONObject json = parseJSONObject(response);
+    // Get the response
+    String response = post.getContent();
+    user.latestServerResponse = response;
+    //println( "user login response: " + response );
 
-      if (json != null && json.hasKey("token")) {
-        println("session token received");
-        return json.getString("token");
-      } else {
-        println("login failed, no token received: " + response);
-        return null;
-      }
+    JSONObject json = parseJSONObject(response);
+
+    if (json != null && json.hasKey("token")) {
+      println("session token received");
+      user.sessionToken = json.getString("token");
+    } else {
+      println("login failed, no token received: " + response);
+      user.sessionToken = null;
     }
-    catch (Exception e) {
-      println("exception while verifying user");
-    }
-    return null;
+  }
+  catch (Exception e) {
+    println("exception while verifying user");
   }
 }
 
@@ -52,15 +56,17 @@ public User userFromFile( String filePath ) {
 
   String[] strings = loadStrings(filePath);
 
-  if ( strings.length != 2 ) {
+  if ( strings.length == 1 ) {
+
+    return new User(strings[0]);
+  } else if ( strings.length == 2 ) {
+
+    return new User( strings[0], strings[1] );
+  } else {
+
     println("invalid user-file: " + filePath);
     return null;
   }
-
-  //strings[0];
-  //strings[1];
-
-  return new User( strings[0], strings[1] );
 }
 
 

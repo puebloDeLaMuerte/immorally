@@ -83,8 +83,8 @@ class Branch {
   float stepLength = 29;//10;
   PVector direction; // Current direction of growth
   float randomness = 12;//5;
-  float pathXrandomFactor = 0.6f;//0.2
-  float pathYrandomFactor = 0.6f;//0.5
+  float pathXrandomFactor = 0.4f;//0.2
+  float pathYrandomFactor = 0.4f;//0.5
 
   float strokeAlpha = 160;
   float strokeWeight = 1.5f;
@@ -181,6 +181,7 @@ class Branch {
 
         if ( newY > height || hitCheckpoint) {
           isComplete = true;
+          playSound();
           startDischarge();
         } else {
           isComplete = true;
@@ -199,11 +200,19 @@ class Branch {
     
     return false;
   }
+  
+  void playSound() {
+    if( lightning.getTotalPointsNumber() > 500 ) { // if it's a big lightning
+        playSomeLove();
+        playSomeThunder();
+      }    
+  }
 
   void startDischarge() {
     strokeAlpha = 250;
     strokeWeight = 6;
   }
+
 
   void display() {
 
@@ -242,7 +251,8 @@ void handleLightning() {
     lightning.draw();  
   
     if( lightning.isDischarged ) {
-      println("lightning: branches: " + lightning.branches.size() + " - points: " + lightning.getTotalPointsNumber());
+      //println("lightning: branches: " + lightning.branches.size() + " - points: " + lightning.getTotalPointsNumber());
+      
       lightning = null;
     }
   } 

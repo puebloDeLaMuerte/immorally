@@ -4,32 +4,35 @@ float opa2 = 0;
 
 int enterCooldownFrame = -1;
 
-
+boolean anyKeyPressed = false;
 
 
 public void userLoginLoop() {
 
   pushStyle();
-  textSize(20);
+  textSize(25);
 
-  String t = "user login";
-  text(t, width/2-textWidth(t)/2, height/2);
+  fill(palette.mainColorSecondary);
+  String t = "login or register";
+  text(t, width/2-textWidth(t)/2, height/2 + 60);
 
   if ( user == null ) {
     user = userFromFile( dataPath("user.txt") );
-    userInputString = user.userName;
+    userInputString = user.username;
   } else if ( !user.isVerified() ) {
     t = "login error: " + user.latestServerResponse;
     //text(t, width/2-textWidth(t)/2, height/2+40);
   }
 
-  // username title
+  boolean blink = frameCount%60 < 30;
 
-  if ( userPassSwitch && frameCount%60 < 30 ) {
+  // username title
+  textSize(20);
+  if ( userPassSwitch && blink ) {
     fill( palette.white );
   } else fill( palette.mainColorSecondary);
   t = "username:";
-  text(t, width/2-textWidth(t)/2, height/2+80);
+  text(t, width/2-textWidth(t)/2, height/2+140);
 
 
   // the user input string for username
@@ -37,44 +40,61 @@ public void userLoginLoop() {
   //println(currentUserNameExists);
 
   if ( currentUserNameExists ) { // && (passInputString == null || passInputString == "") ) {
-    fill( palette.destruction );
+    if( blink && userPassSwitch) {
+      fill( palette.destruction );
+    } else {
+      fill( red(palette.destruction), green(palette.destruction), blue(palette.destruction), 200);
+    }
   } else {
-    fill( palette.mainColorPrimary );
+    if( blink ) {
+      fill( palette.white );  
+    }
+    else {
+      fill( palette.mainColorPrimary );
+    }
+    
   }
   textSize(25);
   t = ""+userInputString;
-  text(t, width/2-textWidth(t)/2, height/2+120);
+  text(t, width/2-textWidth(t)/2, height/2+180);
 
   triggerUsernameCheck(userInputString);
 
 
   // password title
 
-  if ( !userPassSwitch && frameCount%60 < 30 ) {
+  if ( !userPassSwitch && blink ) {
     fill( palette.white );
   } else fill( palette.mainColorPrimary );
   textSize(20);
   t = "password:";
-  text(t, width/2-textWidth(t)/2, height/2+160);
+  text(t, width/2-textWidth(t)/2, height/2+220);
 
 
 
   // the user input string for password
 
   textSize(25);
-  fill( palette.mainColorPrimary );
+  if( blink && !userPassSwitch ) {
+    fill( palette.white );
+  } else {
+    fill( palette.mainColorPrimary );
+  }
+  
   t = ""+passInputString;
-  text(t, width/2-textWidth(t)/2, height/2+200);
+  text(t, width/2-textWidth(t)/2, height/2+260);
 
 
   if ( user != null && user.isVerified() ) {
     
     fill(palette.geilOrange);
     t = "registered and logged in";
-    text(t, width/2-textWidth(t)/2, height/2+250);
+    text(t, width/2-textWidth(t)/2, height/2+370);
     t = "hit [enter] to go racing";
     if ( key == ENTER && keyPressed && frameCount > enterCooldownFrame) {
-      gameState = State.RACE;
+      skidLayer = createGraphics(width, height);
+      //gameState = State.RACE;
+      gameState = State.LOADING;
     }
   }
     
@@ -103,7 +123,7 @@ public void userLoginLoop() {
   }
 
   fill( 200 );
-  text(t, width/2-textWidth(t)/2, height/2+280);
+  text(t, width/2-textWidth(t)/2, height/2+340);
 
 
 
@@ -151,22 +171,39 @@ public void introLoop() {
   textSize(titleSize);
   text( title, 3+width/2 - textWidth(title)/2, height/2 );
 
-
-  if ( frameCount > 900 ) {
-    if ( opa2 < 1 ) opa2 = 1;
-    String pressPlay = "press key to play";
-    textSize(30);
-    fill(palette.darkGlow, opa2 );
-    text(pressPlay, width/2 - textWidth(pressPlay)/2, height/2 + 100 );
-    //text(pressPlay, mouseX,mouseY );
-    opa2 += 0.08;
+  if( gameState == State.INTRO ) {
+    if ( frameCount > 900 ) {
+      if ( opa2 < 1 ) opa2 = 1;
+      String pressPlay = "press key to play";
+      textSize(30);
+      fill(palette.darkGlow, opa2 );
+      text(pressPlay, width/2 - textWidth(pressPlay)/2, height/2 + 100 );
+      //text(pressPlay, mouseX,mouseY );
+      opa2 += 0.08;
+    }  
+  } else {
+    userLoginLoop();
   }
+  
   popStyle();
 
   int k = 0+key;
   //println(k);
   if ( k != 0 ) {
-    skidLayer = createGraphics(width, height);
+    anyKeyPressed = true;
     gameState = State.USER_LOGIN;
+  }
+}
+
+
+public void loadingLoop() {
+  
+  String gens = "loading..."; //<>//
+  textSize(40);
+  fill(palette.mainColorSecondary);
+  text(gens, width/2 -textWidth(gens)/2, height/2);
+  
+  if( isAudioInitialized ) {
+    gameState = State.RACE;
   }
 }

@@ -47,7 +47,7 @@ void keyPressed(KeyEvent e) {
       passInputString = addSubtractInputString( passInputString, e);
     }
     
-    if( keyCode == TAB ) userPassSwitch = !userPassSwitch;
+    if( keyCode == TAB || keyCode == UP || keyCode == DOWN ) userPassSwitch = !userPassSwitch;
     
     return;
   }

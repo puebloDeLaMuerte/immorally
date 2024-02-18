@@ -316,10 +316,10 @@ public class Car {
     tyreCarcasseTemp = tyreCarcasseTemp + ((tyreSurfaceTemp-tyreCarcasseTemp) * tyreCarcasseFollow * delta);
 
     // EMIT SPARKS MAYBE ??
-
-    if ( getSpeed() > sparksSpeed * deltaTime * deltaFactor) {
-
-      if ( random(0, 1) > 0.98 ) {
+    float s = getSpeed();
+    if ( s > sparksSpeed * deltaTime * deltaFactor) {
+      //println(getSpeed());
+      if ( s * random(0, 1) > 3.98 ) {
 
         float d = random(TWO_PI);
         PVector sparkPos = PVector.fromAngle(d);

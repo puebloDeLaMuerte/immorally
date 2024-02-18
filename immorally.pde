@@ -43,7 +43,7 @@ boolean drawTyreInfo = false;
 boolean drawFrameRate = false;
 
 enum State {
-  RACE, USER_LOGIN, INTRO
+  RACE, USER_LOGIN, INTRO, LOADING
 };
 State gameState = State.INTRO;
 
@@ -99,7 +99,9 @@ void setup() {
 
 
   font = createFont("RacelineDemo", deltaPanel.size);
-  initAudio();
+  
+  initAudioPriority();
+  thread("initAudio");
 
   initSkidLayer();
   noiseMap = createGraphics(width/noiseMapSizeFactor, height/noiseMapSizeFactor);
@@ -124,10 +126,14 @@ void draw() {
   background(0);
 
   switch(gameState) {
+  case LOADING:
+    loadingLoop();
+    break;
   case RACE:
     raceLoop();
     break;
   case USER_LOGIN:
+    introLoop();
     userLoginLoop();
     break;
   case INTRO:

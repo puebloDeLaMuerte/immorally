@@ -217,6 +217,7 @@ public void loadNextTrack(int delta) {
   if ( trackIndex >= trackFiles.size() ) trackIndex = 0;
   if ( trackIndex < 0 ) trackIndex = trackFiles.size()-1;
   loadTrack(trackIndex);
+  resetCar(); 
 }
 
 

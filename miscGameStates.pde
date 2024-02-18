@@ -19,7 +19,7 @@ public void userLoginLoop() {
   if ( user == null ) {
     user = userFromFile( dataPath("user.txt") );
     userInputString = user.username;
-    
+    passInputString = user.password;
     if( userInputString != null && userInputString.length() > 0 && (passInputString == null || passInputString.length() == 0) ) {
       userPassSwitch = false;
     }
@@ -33,7 +33,7 @@ public void userLoginLoop() {
 
   // username title
   textSize(20);
-  if ( userPassSwitch && blink ) {
+  if ( userPassSwitch && blink /*&& !user.isVerified()*/ ) {
     fill( palette.white );
   } else fill( palette.mainColorSecondary);
   t = "username:";
@@ -45,13 +45,13 @@ public void userLoginLoop() {
   //println(currentUserNameExists);
 
   if ( currentUserNameExists ) { // && (passInputString == null || passInputString == "") ) {
-    if( blink && userPassSwitch) {
+    if( blink && userPassSwitch  /*&& !user.isVerified()*/ ) {
       fill( palette.destruction );
     } else {
       fill( red(palette.destruction), green(palette.destruction), blue(palette.destruction), 200);
     }
   } else {
-    if( blink ) {
+    if( blink /*&& !user.isVerified()*/ ) {
       fill( palette.white );  
     }
     else {
@@ -68,7 +68,7 @@ public void userLoginLoop() {
 
   // password title
 
-  if ( !userPassSwitch && blink ) {
+  if ( !userPassSwitch && blink /*&& !user.isVerified()*/) {
     fill( palette.white );
   } else fill( palette.mainColorPrimary );
   textSize(20);
@@ -80,7 +80,7 @@ public void userLoginLoop() {
   // the user input string for password
 
   textSize(25);
-  if( blink && !userPassSwitch ) {
+  if( blink && !userPassSwitch /*&& !user.isVerified()*/ ) {
     fill( palette.white );
   } else {
     fill( palette.mainColorPrimary );
@@ -93,6 +93,8 @@ public void userLoginLoop() {
   if ( user != null && user.isVerified() ) {
     
     fill(palette.geilOrange);
+    fill(palette.mainColorPrimary);
+    fill(palette.white);
     t = "registered and logged in";
     text(t, width/2-textWidth(t)/2, height/2+370);
     t = "hit [enter] to go racing";
@@ -112,7 +114,7 @@ public void userLoginLoop() {
           enterCooldownFrame = frameCount + 100;
         }
       } else {
-        t = "username taken";
+        t = "username already registered";
       }
     } else if ( !currentUserNameExists && passInputString!= null && !passInputString.isEmpty() ) {
       t = "hit [enter] to register user";
@@ -127,7 +129,8 @@ public void userLoginLoop() {
     }
   }
 
-  fill( 200 );
+  fill( palette.mainColorPrimary );
+  fill( palette.white );
   text(t, width/2-textWidth(t)/2, height/2+340);
 
 

@@ -29,7 +29,7 @@ public class Car {
   private float breakPower = 0.018;
   private float maxBreaking = 0.035;
 
-  private float carFriction = 0.0040f;// this has been a known classic for the friction constant: 0.0045;
+  private float carFriction = 0.0033f;// this has been a known classic for the friction constant: 0.0045;
 
   private float maxGripTotal = 0.08;
   private boolean maxGripExceeded;
@@ -149,7 +149,7 @@ public class Car {
     if ( removal != null ) {
       if( removal.type == StatusType.DESTRUCTION ) {
         explosion = null;
-        pos = new PVector(width/2,height/2);
+        //pos = new PVector(width/2,height/2);
         acceleration = 0;
         breaking = 0;
         lastMove = new PVector(0,0);

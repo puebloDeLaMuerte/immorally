@@ -65,48 +65,14 @@ public void raceLoop() {
 
 
   if ( resetKeyPressed ) {
-    
-    PVector initPos = new PVector( width/2, height/2 );
-    
-    if( cpm != null ) {
-      Checkpoint base = cpm.checkpoints.get(0);
-      if( base != null ) {
-        initPos.x = base.tile.center.x;
-        initPos.y = base.tile.center.y;
-        cpm.newLap();
-      }
-    }
-    car = new Car( initPos.x, initPos.y, 0);
+    resetCar();
   }
 
   if ( drawFrameRate ) debugPrintFPS(width/2-50, height-100);
 
   dplott.draw();
 
-  if ( drawTyreInfo ) {
-
-    pushStyle();
-    textSize(25);
-    line( 50, 110, 50, 160);
-    line( 150, 110, 150, 160);
-    line( 250, 110, 250, 160);
-    line( 350, 110, 350, 160);
-    line( 450, 110, 450, 160);
-    rect( 50, 120, 2*car.tyreSurfaceTemp, 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
-    rect( 50, 140, 2*car.tyreCarcasseTemp, 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
-    text( ""+(int)(car.tyreSurfaceTemp/10), 10, 125);
-    text( ""+(int)(car.tyreCarcasseTemp/10), 10, 155);
-
-    if ( car.tyreTempPenalty > 0 ) {
-      stroke( 200, 0, 0 );
-      fill( 180, 20, 20 );
-    } else {
-      stroke( 0, 0, 200 );
-      fill( 20, 20, 180 );
-    }
-    rect( 50, 131, abs(car.tyreTempPenalty) * 100, 5 );
-    popStyle();
-  }
+  
 
 
   //popMatrix();
@@ -114,8 +80,43 @@ public void raceLoop() {
 }
 
 
-void drawUI() {
+void resetCar( float x, float y ) {
   
+  println("resetting the car to: " + x + "/" + y);
+  
+  car = new Car( x,y,0 );
+  
+  //StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+  //for (StackTraceElement element : stackTraceElements) {
+  //  System.out.println(element.toString());
+  //}
+}
+
+
+void resetCar() {
+  
+  PVector initPos = new PVector( width/2, height/2 );
+
+  if ( cpm != null ) {
+    if( cpm.checkpoints != null && cpm.checkpoints.size() > 0 ) {
+      Checkpoint base = cpm.checkpoints.get(0);
+      if ( base != null ) {
+        initPos.x = base.tile.center.x;
+        initPos.y = base.tile.center.y;
+        cpm.newLap(true);
+      }
+    }
+  }
+  resetCar( initPos.x, initPos.y );
+  
+  
+}
+
+
+
+
+void drawUI() {
+
   int gfirst = 70;
   int gsecond = 100;
 
@@ -168,6 +169,31 @@ void drawUI() {
     text("optimal", width-200, gsecond);
   }
   popStyle();
+  
+  if ( drawTyreInfo ) {
+
+    pushStyle();
+    textSize(25);
+    line( 50, 110, 50, 160);
+    line( 150, 110, 150, 160);
+    line( 250, 110, 250, 160);
+    line( 350, 110, 350, 160);
+    line( 450, 110, 450, 160);
+    rect( 50, 120, 2*car.tyreSurfaceTemp, 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
+    rect( 50, 140, 2*car.tyreCarcasseTemp, 10 ); // debug tyreTemp     2*car.tyreSurfaceTemp / car.tyreTempMaxDisplay
+    text( ""+(int)(car.tyreSurfaceTemp/10), 10, 125);
+    text( ""+(int)(car.tyreCarcasseTemp/10), 10, 155);
+
+    if ( car.tyreTempPenalty > 0 ) {
+      stroke( 200, 0, 0 );
+      fill( 180, 20, 20 );
+    } else {
+      stroke( 0, 0, 200 );
+      fill( 20, 20, 180 );
+    }
+    rect( 50, 131, abs(car.tyreTempPenalty) * 100, 5 );
+    popStyle();
+  }
 }
 
 

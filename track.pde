@@ -178,7 +178,7 @@ public class Track {
     if ( !isGenerated ) {
 
       playStatic(true);
-      car = new Car(width/2, height/2, 0);
+      if( car == null ) car = new Car(width/2, height/2, 0);
       String gens = "generating...";
       textSize(40);
       fill(palette.mainColorSecondary);

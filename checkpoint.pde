@@ -21,6 +21,7 @@ public class CheckpointManager {
   int lapCount = 0;
   int validLapCount = 0;
 
+  Highscores highscores = new Highscores();
 
   public void reset() {
     checkpoints = new ArrayList();
@@ -153,7 +154,7 @@ public class CheckpointManager {
       if ( i == 0 ) {
         //checkpoints.get(0).checkForContact(x,y,s);
         if ( checkpoints.get(0).secondChecked && checkpoints.get(0).left ) {//&& checkpoints.get(checkpoints.size()-1).checked ) {
-          newLap();
+          newLap(false);
         }
       }/*
       else if( !checkpoints.get(i).checked) {
@@ -182,14 +183,15 @@ public class CheckpointManager {
    }
    */
 
-  public void newLap() {
-    println("newLap");
+  public void newLap( boolean invalidateLap ) {
+    //println("newLap");
 
-    boolean allchecked = true; //<>//
+    boolean allchecked = true;
     for ( Checkpoint cp : checkpoints ) {
       if ( !cp.checked ) allchecked = false;
     }
-
+    if( invalidateLap ) allchecked = false;
+    
     long thisLapTime = checkpoints.get(0).secondCheckTime - checkpoints.get(0).checkTime;
     lapCount++;
     
@@ -246,8 +248,10 @@ public class CheckpointManager {
 
     thisLap.finalize();
 
-    deltaPanel.showPanel( getCurrentDeltaToBest(), getCurrentDeltaToMedian(), currentDeltaToBest >= 0d, isPersonalBest, false );
-
+    if( validLapCount > 1 ) {
+      deltaPanel.showPanel( getCurrentDeltaToBest(), getCurrentDeltaToMedian(), currentDeltaToBest >= 0d, isPersonalBest, false );  
+    }
+    
     for ( Checkpoint cp : checkpoints ) {
       cp.newLap();
     }

@@ -20,7 +20,7 @@ SoundFile disconnect;
 
 SoundFile love;
 SoundFile[] pipautotracks;
-int lastPlayedTrack;
+int lastPlayedTrack = -1;
 
 SoundFile[] thunder;
 
@@ -53,7 +53,7 @@ void initAudio() {
   boo = new SoundFile(this, audioFolder+"514159__edwardszakal__distorted-beep-incorrect.mp3");     
   boo.amp(0.6);
   disconnect = new SoundFile(this, audioFolder+"Disconnect.wav");
-  love = new SoundFile(this, audioFolder+"Pips_Auto 1 .mp3");
+  love = new SoundFile(this, audioFolder+"Pips_Auto 1.wav");
 
   lap.amp(0.1);
   ding.amp(1.4);
@@ -75,7 +75,7 @@ SoundFile[] LoadPipAuto(String folderPath) {
   ArrayList<SoundFile> pipAutoFiles = new ArrayList<SoundFile>();
 
   // Regex to match the file pattern "Pip(s)_Auto n.mp3"
-  String regex = "Pip(s)?_Auto \\d+\\.mp3";
+  String regex = "Pip(s)?_Auto \\d+\\.wav";
   Pattern pattern = Pattern.compile(regex);
 
   if (listOfFiles != null) {
@@ -133,7 +133,7 @@ void loadSoundFilesRecursively(String folderPath, ArrayList<SoundFile> soundFile
 void playSomeThunder() {
   
   int r = floor(random(thunder.length));
-  if( !thunder[r].isPlaying() ) {
+  if( thunder[r] != null && !thunder[r].isPlaying() ) {
     //println("playing thunder nr: " + r + " out of " + thunder.length);
     thunder[r].amp(0.64);
     thunder[r].play();
@@ -166,8 +166,10 @@ void playSomeLove() {
 
 
 void playLove() {
-  println("love");
-  love.play();
+  println("love"); //<>//
+  if( love != null ) {
+    //love.play();
+  }
 }
 
 void playStatic(boolean play) {

@@ -1,3 +1,11 @@
+public class Highscores {
+  
+  int currentHotlapWorldRank = -1;
+  
+  // TODO: receive users best time and rank from server and display here. 
+}
+
+
 
 void sendHighscore() {
   
@@ -19,8 +27,24 @@ void sendHighscore() {
   post.send();
 
   // Checking the response
-  println("Response Content  : " + post.getContent());
-  println("Response to String: " + post.toString());
+  println("Response Content  : " + post.getContent());  
+
+  //// PARSE THE RESULT
+  
+  String input = post.getContent(); 
+  String regex = "Your rank: (\\d+)";
+  
+  Pattern pattern = Pattern.compile(regex);
+  Matcher matcher = pattern.matcher(input);
+  
+  if (matcher.find()) {
+      int rank = Integer.parseInt(matcher.group(1)); // Group 1 contains the first set of parentheses in the regex, which is the digits part
+      cpm.highscores.currentHotlapWorldRank = rank;
+      println("string: " + matcher.group(1));
+      System.out.println("Rank: " + rank);
+  } else {
+      System.err.println("Rank not found in the input string.");
+  }
 }
 
 

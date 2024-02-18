@@ -51,7 +51,7 @@ void initAudio() {
   yeah = new SoundFile(this, audioFolder+"496087__dastudiospr__male-yeah.wav");
   //boo = new SoundFile(this, audioFolder+"boo.wav");     
   boo = new SoundFile(this, audioFolder+"514159__edwardszakal__distorted-beep-incorrect.mp3");     
-  boo.amp(0.4);
+  boo.amp(0.6);
   disconnect = new SoundFile(this, audioFolder+"Disconnect.wav");
   love = new SoundFile(this, audioFolder+"Pips_Auto 1 .mp3");
 
@@ -59,7 +59,7 @@ void initAudio() {
   ding.amp(1.4);
 
   pipautotracks = LoadPipAuto(audioFolder);
-  thunder = loadSoundFilesFromFolder( audioFolder+"thunder" );
+  thunder = loadSoundFilesFromFolder( audioFolder+"thunder_normalized" );
   
   isAudioInitialized = true;
 }
@@ -134,6 +134,7 @@ void playSomeThunder() {
   
   int r = floor(random(thunder.length));
   if( !thunder[r].isPlaying() ) {
+    //println("playing thunder nr: " + r + " out of " + thunder.length);
     thunder[r].amp(0.64);
     thunder[r].play();
   }
@@ -141,6 +142,10 @@ void playSomeThunder() {
 
 
 void playSomeLove() {
+  
+  if( love.isPlaying() ) {
+    return;
+  }
   
   for( SoundFile sf : pipautotracks ) {
     if( sf.isPlaying() ) return;
@@ -150,8 +155,11 @@ void playSomeLove() {
   while ( r == lastPlayedTrack ) {
     r = floor(random(pipautotracks.length));
   }
+  
+  println("playing track nr: " + r + " out of " + thunder.length);
+  println("rack: " + pipautotracks[r].toString());
 
-  pipautotracks[r].amp(0.7);
+  pipautotracks[r].amp(0.71);
   pipautotracks[r].play();
   lastPlayedTrack = r;
 }
@@ -237,6 +245,11 @@ void playElectric( float speed ) {
 
   speed *= 0.8;
   speed += 0.9;
-
+  
+  float cx = car.pos.x;
+  float px = cx - width/2;
+  px /= (width+100);
+  
+  electric.pan(px);
   electric.rate(speed);
 }

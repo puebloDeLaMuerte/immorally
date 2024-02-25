@@ -5,7 +5,7 @@ boolean accelKeyPressed;
 char breakKey = 'y';
 boolean breakKeyPressed;
 
-char turnLeftKey = ',';
+char turnLeftKey = ',';//,
 boolean turnLeftPressed;
 
 char turnRightKey = '.';

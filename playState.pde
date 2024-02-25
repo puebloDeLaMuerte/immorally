@@ -47,9 +47,10 @@ public void raceLoop() {
   popStyle();
   cpm.drawCheckpoints();
 
+  panCarSounds();
   //playEngine(car.getSpeed());
   playElectric(car.getSpeed());
-
+  //playScratch(car.skidAmount);
   //playElectric(car.getEngineLevel()*10);
   car.drawCar(skidLayer);
 
@@ -128,14 +129,20 @@ void drawUI() {
   text( track.trackName, 50, gsecond);
 
   fill(palette.darkGlow);
-  text("best:", 250, gfirst);
+  text("current hotlap world rank: ", 250, gfirst);
+  fill(palette.mainColorPrimary);
+  text(cpm.highscores.currentHotlapWorldRank, 610, gfirst);
+  
+  fill(palette.darkGlow);
+  text("session best:", 250, gsecond);
+  
   fill(palette.mainColorSecondary);
-  text(cpm.getBestTime(), 250, gsecond);
+  text(cpm.getBestTime(), 440, gsecond);
 
   fill(palette.darkGlow);
-  text("median:", 450, gfirst);
+  text("median:", width/2 + 200, gfirst);
   fill(palette.mainColorSecondary);
-  text(cpm.getMedianTime(), 450, gsecond);
+  text(cpm.getMedianTime(), width/2 + 200, gsecond);
 
   // draw lap nr
   fill(palette.darkGlow);

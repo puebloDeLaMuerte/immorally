@@ -16,6 +16,7 @@ SoundFile yeah;
 SoundFile boo;
 SoundFile boom;
 SoundFile staticElectric;
+SoundFile scratches;
 SoundFile disconnect;
 
 SoundFile love;
@@ -26,6 +27,8 @@ SoundFile[] thunder;
 
 boolean isAudioInitialized = false;
 String audioFolder = "audio/";
+
+float carPanX; // how far right/left any car related sounds should be panned.
 
 void initAudioPriority() {
   boom = new SoundFile(this, audioFolder+"412172__inspectorj__cinematic-hit-distorted-a_attribute.wav");
@@ -54,6 +57,7 @@ void initAudio() {
   boo.amp(0.6);
   disconnect = new SoundFile(this, audioFolder+"Disconnect.wav");
   love = new SoundFile(this, audioFolder+"Pips_Auto 1.wav");
+  scratches = new SoundFile(this, audioFolder+"266433_needle-scrathces-tin-yt-20215_worked.wav");
 
   lap.amp(0.1);
   ding.amp(1.4);
@@ -248,10 +252,35 @@ void playElectric( float speed ) {
   speed *= 0.8;
   speed += 0.9;
   
-  float cx = car.pos.x;
-  float px = cx - width/2;
-  px /= (width+100);
-  
-  electric.pan(px);
+  electric.pan(carPanX);
   electric.rate(speed);
+}
+
+
+void playScratch( float skidAmount ) {
+  
+  if( !scratches.isPlaying() ) {
+    
+    scratches.loop();
+  }
+  
+  float scratchAmount = skidAmount / 3f;
+  scratchAmount*=2;
+  float speedFactor = car.getSpeed();
+  speedFactor -= 1.2f;
+  if( speedFactor < 0.1f ) speedFactor = 0.1f;
+  scratchAmount *= speedFactor;
+  println(car.getSpeed());
+  
+  scratches.amp(scratchAmount);
+  
+  scratches.pan(carPanX);
+}
+
+
+void panCarSounds() {
+  
+  float cx = car.pos.x;
+  carPanX = cx - width/2;
+  carPanX /= (width+100);
 }

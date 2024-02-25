@@ -24,8 +24,8 @@ char saveTrackKey = 'S';
 char loadTrackKey = 'l';
 char loadPrevTrackKey = 'L';
 
-char printDebugInfoKey = 'p';
-
+char printDebugInfoKey = '0';
+char pauseKey = ' ';
 
   float steerInput = 0;
   float accelInput = 0;
@@ -54,8 +54,13 @@ void keyPressed(KeyEvent e) {
   
   char k = e.getKey();
   
-  if( k == 'ü' ) car.tyreCarcasseTemp = 260;
-    
+  if( k == pauseKey ) {
+    paused = !paused;
+    if( paused ) {
+      text("paused", width / 2, height / 2);
+    }
+  }
+      
   if( k == turnLeftKey ) turnLeftPressed = true;
   if( k == turnRightKey ) turnRightPressed = true;
   if( k == accelerateKey ) accelKeyPressed = true;

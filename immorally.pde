@@ -42,6 +42,8 @@ int trackIndex = 0;
 boolean drawTyreInfo = false;
 boolean drawFrameRate = false;
 
+boolean paused = false;
+
 enum State {
   RACE, USER_LOGIN, INTRO, LOADING
 };
@@ -122,15 +124,18 @@ void initSkidLayer() {
 void draw() {
 
   //println("frame");
+  updateDelta();
 
-  background(0);
+  if( !paused ) background(0);
 
   switch(gameState) {
   case LOADING:
     loadingLoop();
     break;
   case RACE:
-    raceLoop();
+    if( !paused ) {
+      raceLoop();  
+    }
     break;
   case USER_LOGIN:
     introLoop();

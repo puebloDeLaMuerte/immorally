@@ -1,3 +1,5 @@
+
+
 public void raceLoop() {
 
 
@@ -35,7 +37,7 @@ public void raceLoop() {
 
   sparks.drawSparks(g, 200);
 
-  updateDelta();
+  //updateDelta();
   car.updateStatus();
   calculateInput(car);
   car.updatePhysics();
@@ -120,6 +122,7 @@ void drawUI() {
 
   int gfirst = 70;
   int gsecond = 100;
+
 
   pushStyle();
   textSize(25);

@@ -539,6 +539,10 @@ public class PowerDownCheckpoint extends Checkpoint {
   protected void doEffect( Car car ) {
     playDisconnect();
     car.triggerStatus( new CarStatus( millis(), 600, StatusType.POWER_DOWN) );
+    
+    for(int i = 0; i < 10; i++) {
+      sparks.releaseSpark(car.pos, new PVector((car.lastMove.x*0.2) + random(-1.2,1.2), (car.lastMove.y*0.2) + random(-1.2,1.2)), palette.geilOrange );
+    }
   }
   
   @Override
@@ -572,8 +576,11 @@ public class DestructionCheckpoint extends Checkpoint {
     car.triggerStatus( new CarStatus( millis(), 1600, StatusType.DESTRUCTION) );
     car.explosion = new Explosion(car.getCarComponents(), car.lastMove);
     
-    for(int i = 0; i < 20; i++) {
+    for(int i = 0; i < 10; i++) {
       sparks.releaseSpark(car.pos, new PVector(car.lastMove.x + random(-1,1), car.lastMove.y + random(-1,1)));
+    }
+    for(int i = 0; i < 20; i++) {
+      sparks.releaseSpark(car.pos, new PVector(car.lastMove.x + random(-1,1), car.lastMove.y + random(-1,1)), palette.destruction);
     }
   }
   

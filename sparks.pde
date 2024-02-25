@@ -88,7 +88,7 @@ public class Sparks {
     private void releaseChildSpark() {
       float r = random(TWO_PI);
         PVector dir = PVector.fromAngle(r);
-        dir.setMag(startSpeed.mag()* 0.1);
+        dir.setMag(startSpeed.mag()* 0.25);
         childSparks.add( new Spark(pos, dir, true) );
     }
   }

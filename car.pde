@@ -317,7 +317,7 @@ public class Car {
 
     // EMIT SPARKS MAYBE ??
     float s = getSpeed();
-    if ( s > sparksSpeed * deltaTime * deltaFactor) {
+    if ( /*s > sparksSpeed * deltaTime * deltaFactor || */ slideFactor > 0.1) {
       //println(getSpeed());
       if ( s * random(0, 1) > 3.98 ) {
 

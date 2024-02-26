@@ -170,7 +170,7 @@ void playSomeLove() {
 
 
 void playLove() {
-  println("love"); //<>//
+  println("love");
   if( love != null ) {
     //love.play();
   }

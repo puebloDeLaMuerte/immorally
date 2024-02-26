@@ -57,7 +57,13 @@ void keyPressed(KeyEvent e) {
   if( k == pauseKey ) {
     paused = !paused;
     if( paused ) {
-      text("paused", width / 2, height / 2);
+      //pausedMillis = 0;
+      pushStyle();
+      fill(palette.darkGlow);
+      textSize(120);
+      float tw = textWidth("paused");
+      text("paused", (width/2)-tw/2, (height/2) );
+      popStyle();
     }
   }
       

@@ -43,6 +43,7 @@ boolean drawTyreInfo = false;
 boolean drawFrameRate = false;
 
 boolean paused = false;
+int pausedMillis = 0;
 
 enum State {
   RACE, USER_LOGIN, INTRO, LOADING
@@ -133,8 +134,11 @@ void draw() {
     loadingLoop();
     break;
   case RACE:
-    if( !paused ) {
-      raceLoop();  
+    if( paused ) {
+      pausedMillis += deltaTime; 
+    }
+    else {
+      raceLoop();
     }
     break;
   case USER_LOGIN:

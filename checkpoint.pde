@@ -104,6 +104,7 @@ public class CheckpointManager {
     
     Checkpoint c = checkpoints.get(0);
     long t = (long)(millis()-c.checkTime);
+    t -= pausedMillis;
     long totalSeconds = t / 1000l;
     long milli = (long)t % 1000l;
     long minutes = (long)(totalSeconds % 3600l) / 60l;
@@ -192,8 +193,9 @@ public class CheckpointManager {
     }
     if( invalidateLap ) allchecked = false;
     
-    long thisLapTime = checkpoints.get(0).secondCheckTime - checkpoints.get(0).checkTime;
+    long thisLapTime = checkpoints.get(0).secondCheckTime - checkpoints.get(0).checkTime - pausedMillis;
     lapCount++;
+    pausedMillis = 0;
     
     Lap thisLap = new Lap(new Long(thisLapTime), lapCount, allchecked); 
     allLaps.add( thisLap );

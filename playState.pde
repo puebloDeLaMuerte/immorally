@@ -130,17 +130,26 @@ void drawUI() {
   text("track:", 50, gfirst);
   fill(palette.mainColorSecondary);
   text( track.trackName, 50, gsecond);
+  
+  fill(palette.darkGlow);
+  text("personal best:", 250, gfirst);
+  fill(palette.mainColorSecondary);
+  text(cpm.getBestTime(), 250, gsecond);
+
+  //fill(palette.darkGlow);
+  //text("rank: ", 430, gfirst);
+  fill(palette.white);
+  text("#"+cpm.highscores.currentHotlapWorldRank, 405, gsecond);
 
   fill(palette.darkGlow);
-  text("current hotlap world rank: ", 250, gfirst);
-  fill(palette.mainColorPrimary);
-  text(cpm.highscores.currentHotlapWorldRank, 610, gfirst);
-  
-  fill(palette.darkGlow);
-  text("session best:", 250, gsecond);
-  
+  text("session best:", 530, gfirst);
   fill(palette.mainColorSecondary);
-  text(cpm.getBestTime(), 440, gsecond);
+  text(cpm.getBestTime(), 530, gsecond);
+
+  //fill(palette.darkGlow);
+  //text("rank: ", 710, gfirst);
+  fill(palette.white);
+  text("#"+cpm.highscores.currentHotlapWorldRank, 685, gsecond);
 
   fill(palette.darkGlow);
   text("median:", width/2 + 200, gfirst);
@@ -149,13 +158,13 @@ void drawUI() {
 
   // draw lap nr
   fill(palette.darkGlow);
-  text("Lap:", width/2 - 115, gfirst);
+  text("Lap:", width/2 - 70, gfirst);
   fill(palette.white);
-  text( cpm.validLapCount, (width/2) - textWidth(""+cpm.validLapCount), gfirst);
+  text( cpm.validLapCount, (width/2) /*- textWidth(""+cpm.validLapCount)*/, gfirst);
 
   // draw lapTime
   String timeString = cpm.getTimeElapsed();
-  drawLaptime((width/2)-120, gsecond, timeString);
+  drawLaptime( (width/2) - 90, gsecond, timeString);
   //text(timeString, width/2-textWidth(timeString)/2, gsecond);
 
   fill(palette.darkGlow);

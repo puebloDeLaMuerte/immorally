@@ -91,6 +91,8 @@ public class CheckpointManager {
 
   public String getBestTime() {
 
+    if( bestLapTime == maxLapTime ) return "--:--:--";
+    
     long totalSeconds = (long)bestLapTime / 1000l;
     long milli = (long)bestLapTime % 1000l;
     long minutes = (long)(totalSeconds % 3600l) / 60l;

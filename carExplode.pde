@@ -10,7 +10,7 @@ class PShapeInfo {
         this.position = position;
         this.rotation = rotation;
         this.rotationPerFrame = random(-2,2);
-        this.positionPerFrame = new PVector( random(-2,2), random(-2,2));
+        this.positionPerFrame = new PVector( random(-4,4), random(-4,4));
     }
 }
 
@@ -53,7 +53,7 @@ class Explosion {
       
       gr.pushMatrix();
       gr.pushStyle();
-      gr.stroke(palette.mainColorPrimary, opacity);
+      gr.stroke(red(palette.mainColorPrimary), green(palette.mainColorPrimary), blue(palette.mainColorPrimary), opacity);
       
       PVector explodedPosition = component.position.copy();
       gr.translate(explodedPosition.x, explodedPosition.y);

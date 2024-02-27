@@ -95,7 +95,7 @@ public class CheckpointManager {
     
     long totalSeconds = (long)bestLapTime / 1000l;
     long milli = (long)bestLapTime % 1000l;
-    long minutes = (long)(totalSeconds % 3600l) / 60l;
+    long minutes = (long)(totalSeconds % 3600l) / 60l;  
     long seconds = (long)totalSeconds % 60l;
     return String.format("%02d : %02d : %03d", minutes, seconds, milli);
   }
@@ -585,6 +585,12 @@ public class DestructionCheckpoint extends Checkpoint {
     }
     for(int i = 0; i < 20; i++) {
       sparks.releaseSpark(car.pos, new PVector(car.lastMove.x + random(-1,1), car.lastMove.y + random(-1,1)), palette.destruction);
+    }
+    for(int i = 0; i < 10; i++) {
+      sparks.releaseSpark(car.pos, new PVector(random(-2,2), random(-2,2)));
+    }
+    for(int i = 0; i < 20; i++) {
+      sparks.releaseSpark(car.pos, new PVector(random(-2,2), random(-2,2)), palette.destruction);
     }
   }
   

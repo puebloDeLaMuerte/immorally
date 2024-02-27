@@ -63,7 +63,7 @@ public class Car {
   float tyreTempPenalty;
   
   float tyreCooldown = 0.006f;
-  float tyreCarcasseFollow = 0.001;
+  float tyreCarcasseFollow = 0.0005; // how fast the tyre-carcasse temperature follows the tyre surface temp
   
   float tyreTempMaxDisplay = 105;
   float tyreTempBaselineDisplay = 30;
@@ -332,7 +332,7 @@ public class Car {
   
   public void calculatePenalty() {
     
-    float maxPenalty = 1.2; // Maximum penalty value
+    float maxPenalty = 2.4;//1.2; // Maximum penalty value
     float penaltyRange = tyreOptimalTemp; // Range within which the penalty increases
   
     // Calculate the absolute difference from the optimal temperature

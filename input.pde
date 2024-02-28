@@ -31,7 +31,7 @@ char pauseKey = ' ';
   float accelInput = 0;
   float breakInput = 0;
 
-String userInputString = "";
+String userInputString = null;
 String passInputString = "";
 boolean userPassSwitch = true;
 

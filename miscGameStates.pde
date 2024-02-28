@@ -6,6 +6,8 @@ int enterCooldownFrame = -1;
 
 boolean anyKeyPressed = false;
 
+String lastUserInputString;
+
 
 public void userLoginLoop() {
 
@@ -16,17 +18,22 @@ public void userLoginLoop() {
   String t = "login or register";
   text(t, width/2-textWidth(t)/2, height/2 + 60);
 
-  if ( user == null ) {
-    user = userFromFile( dataPath("user.txt") );
+  if ( user == null && userInputString == null ) {
+    user = userFromFile( dataPath("user.txt") ); //<>//
     userInputString = user.username;
     passInputString = user.password;
     if( userInputString != null && userInputString.length() > 0 && (passInputString == null || passInputString.length() == 0) ) {
       userPassSwitch = false;
     }
     
-  } else if ( !user.isVerified() ) {
+  } else if ( user != null && !user.isVerified() ) {
     t = "login error: " + user.latestServerResponse;
-    //text(t, width/2-textWidth(t)/2, height/2+40);
+    text(t, width/2-textWidth(t)/2, height/2+40);
+  }
+  
+  if( user != null && userInputString != user.username ) {
+    user = null;
+    passInputString = "";
   }
 
   boolean blink = frameCount%60 < 30;
@@ -63,7 +70,10 @@ public void userLoginLoop() {
   t = ""+userInputString;
   text(t, width/2-textWidth(t)/2, height/2+180);
 
-  triggerUsernameCheck(userInputString);
+  if( lastUserInputString != userInputString ) {
+    triggerUsernameCheck(userInputString);  
+  }
+  
 
 
   // password title
@@ -106,7 +116,7 @@ public void userLoginLoop() {
   }
     
   if( user == null || !user.isVerified() ) {
-    if ( currentUserNameExists ) {
+    if ( currentUserNameExists && ! isUserExistsCallPending ) {
       if ( passInputString!= null && !passInputString.isEmpty() ) {
         t = "hit [enter] to login";
         if ( key == ENTER && keyPressed ) {
@@ -136,6 +146,8 @@ public void userLoginLoop() {
 
 
   popStyle();
+  
+  lastUserInputString = userInputString;
 }
 
 

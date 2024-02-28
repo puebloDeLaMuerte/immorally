@@ -59,7 +59,7 @@ public class Car {
 
   float tyreSurfaceTemp = 0;
   float tyreCarcasseTemp = 0;
-  float tyreOptimalTemp = 55;
+  float tyreOptimalTemp = 55;//55
   float tyreTempPenalty;
   
   float tyreCooldown = 0.006f;

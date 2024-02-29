@@ -8,7 +8,8 @@ public class CheckpointManager {
 
   ArrayList<Lap> allLaps = new ArrayList();
   
-  long bestLapTime = maxLapTime;
+  
+  long sessionBestLapTime = maxLapTime;
   int currentBestLapTotalNr = -1;
   
   long medianTime = 0;
@@ -26,7 +27,7 @@ public class CheckpointManager {
   public void reset() {
     checkpoints = new ArrayList();
     specialCheckpoints = new ArrayList();
-    bestLapTime = 999999999999999999l;
+    sessionBestLapTime = 999999999999999999l;
   }
   
   
@@ -91,10 +92,10 @@ public class CheckpointManager {
 
   public String getBestTime() {
 
-    if( bestLapTime == maxLapTime ) return "--:--:--";
+    if( sessionBestLapTime == maxLapTime ) return "--:--:--";
     
-    long totalSeconds = (long)bestLapTime / 1000l;
-    long milli = (long)bestLapTime % 1000l;
+    long totalSeconds = (long)sessionBestLapTime / 1000l;
+    long milli = (long)sessionBestLapTime % 1000l;
     long minutes = (long)(totalSeconds % 3600l) / 60l;  
     long seconds = (long)totalSeconds % 60l;
     return String.format("%02d : %02d : %03d", minutes, seconds, milli);
@@ -222,7 +223,7 @@ public class CheckpointManager {
 
     lastMedianTime = medianTime;
     
-    currentDeltaToBest = thisLapTime - bestLapTime;
+    currentDeltaToBest = thisLapTime - sessionBestLapTime;
     
     // calculate current median time
     
@@ -240,7 +241,7 @@ public class CheckpointManager {
 
     boolean isPersonalBest = false;
     if ( thisLap.getLapTimeAsDouble() < getCurrentBestLapTimeAsDouble() ) {
-      bestLapTime = thisLapTime;
+      sessionBestLapTime = thisLapTime;
       currentBestLapTotalNr = thisLap.getTotalLapNr();
       
       thread("sendHighscore");

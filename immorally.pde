@@ -227,6 +227,8 @@ public void loadNextTrack(int delta) {
   if ( trackIndex < 0 ) trackIndex = trackFiles.size()-1;
   loadTrack(trackIndex);
   resetCar(); 
+  
+  thread("receiveBestScore");
 }
 
 

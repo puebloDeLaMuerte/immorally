@@ -1,16 +1,29 @@
 public class Highscores {
-  
+
   int currentHotlapWorldRank = -1;
   
-  // TODO: receive users best time and rank from server and display here. 
+  int previousHotlapWorldRank = -1;
+  int previousBestLapTime = -1;
+
+
+  public String getPreviousBestTime() {
+
+    if( previousBestLapTime == cpm.maxLapTime || previousBestLapTime == -1 ) return "--:--:--";
+    
+    long totalSeconds = (long)previousBestLapTime / 1000l;
+    long milli = (long)previousBestLapTime % 1000l;
+    long minutes = (long)(totalSeconds % 3600l) / 60l;  
+    long seconds = (long)totalSeconds % 60l;
+    return String.format("%02d : %02d : %03d", minutes, seconds, milli);
+  }
 }
 
 
 
 void sendHighscore() {
-  
-  println("testing highscore service ...");
-  
+
+  println("submitting to highscore service ...");
+
   // URL of your endpoint
   String url = "http://immorally.mitgutemerfolg.org/api/submit_hotlap.php";
 
@@ -27,23 +40,66 @@ void sendHighscore() {
   post.send();
 
   // Checking the response
-  println("Response Content  : " + post.getContent());  
+  println("Response Content  : " + post.getContent());
 
   //// PARSE THE RESULT
-  
-  String input = post.getContent(); 
+
+  String input = post.getContent();
   String regex = "Your rank: (\\d+)";
-  
+
   Pattern pattern = Pattern.compile(regex);
   Matcher matcher = pattern.matcher(input);
-  
+
   if (matcher.find()) {
-      int rank = Integer.parseInt(matcher.group(1)); // Group 1 contains the first set of parentheses in the regex, which is the digits part
-      cpm.highscores.currentHotlapWorldRank = rank;
-      println("string: " + matcher.group(1));
-      System.out.println("Rank: " + rank);
+    int rank = Integer.parseInt(matcher.group(1)); // Group 1 contains the first set of parentheses in the regex, which is the digits part
+    cpm.highscores.currentHotlapWorldRank = rank;
+    println("string: " + matcher.group(1));
+    System.out.println("Rank: " + rank);
   } else {
-      System.err.println("Rank not found in the input string.");
+    System.err.println("Rank not found in the input string.");
+  }
+}
+
+
+
+void receiveBestScore() {
+
+  println("getting prev highscore ...");
+
+  // URL of your endpoint
+  String url = "http://immorally.mitgutemerfolg.org/api/get_user_best_score.php";
+
+  // Creating a new POST request
+  PostRequest post = new PostRequest(url);
+  post.addData("HTTP_AUTHORIZATION", user.sessionToken);
+  post.addData("HTTP_API_KEY", apiKey);
+  // Adding data to the request
+
+  post.addData("track_hash", track.getSHA256Hash() );
+  // Sending the request
+  post.send();
+
+  // Checking the response
+  println("Response Content  : " + post.getContent());
+
+  //// PARSE THE RESULT
+
+  String response = post.getContent();
+  
+  int[] results = {-1, -1}; // Default values
+
+  String[] parts = response.split(",");
+  if (!"NTR,NR".equals(response)) { // Check if it's not the default failure response
+    try {
+      results[0] = Integer.parseInt(parts[0]); // Parse best time
+      results[1] = Integer.parseInt(parts[1]); // Parse world rank  
+      println("best time: " + results[0] + " rank: " + results[1]);
+    } catch(Exception e) {
+      println("error parsing previous highscores result: " + response);
+    }
+  }
+  else {
+    println("no previous score data");
   }
 }
 
@@ -52,13 +108,13 @@ void sendHighscore() {
 
 
 void testRegisterTrack() {
-  
+
   println("testRegisterTrack");
   int serverTrackID = checkIfTrackExists(track.getSHA256Hash());
-  if( serverTrackID == -1 ) {
+  if ( serverTrackID == -1 ) {
     println("track not registered on server, registering now");
     boolean success = registerTrack( track.trackName, track.getSHA256Hash(), 1 );
-    if( success ) println("track registered successfully");
+    if ( success ) println("track registered successfully");
   } else {
     println("track already registered");
   }
@@ -67,7 +123,7 @@ void testRegisterTrack() {
 
 
 int checkIfTrackExists(String trackHash) {
-  
+
   GetRequest get = new GetRequest("http://immorally.mitgutemerfolg.org/api/get_track_id.php?track_hash=" + trackHash);
   get.send();
 
@@ -85,7 +141,7 @@ int checkIfTrackExists(String trackHash) {
 
 // Function to register a new track
 boolean registerTrack(String trackName, String trackHash, int createdBy) {
-  
+
   PostRequest post = new PostRequest("http://immorally.mitgutemerfolg.org/api/register_track.php");
   post.addData("track_name", trackName);
   post.addData("track_hash", trackHash);

@@ -134,12 +134,12 @@ void drawUI() {
   fill(palette.darkGlow);
   text("personal best:", 250, gfirst);
   fill(palette.mainColorSecondary);
-  text(cpm.getBestTime(), 250, gsecond);
+  text(cpm.highscores.getPreviousBestTime(), 250, gsecond);
 
   //fill(palette.darkGlow);
   //text("rank: ", 430, gfirst);
   fill(palette.white);
-  text("#"+cpm.highscores.currentHotlapWorldRank, 405, gsecond);
+  text("#"+cpm.highscores.previousHotlapWorldRank, 405, gsecond);
 
   fill(palette.darkGlow);
   text("session best:", 530, gfirst);

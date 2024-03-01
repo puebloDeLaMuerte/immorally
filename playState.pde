@@ -89,6 +89,10 @@ void resetCar( float x, float y ) {
   
   car = new Car( x,y,0 );
   
+  PVector direction = PVector.sub(new PVector(width/2,height/2), new PVector(x,y));
+  float angle = atan2(direction.y, direction.x);
+  car.rotation = angle;
+  
   //StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
   //for (StackTraceElement element : stackTraceElements) {
   //  System.out.println(element.toString());
@@ -99,7 +103,7 @@ void resetCar( float x, float y ) {
 void resetCar() {
   
   PVector initPos = new PVector( width/2, height/2 );
-
+  
   if ( cpm != null ) {
     if( cpm.checkpoints != null && cpm.checkpoints.size() > 0 ) {
       Checkpoint base = cpm.checkpoints.get(0);

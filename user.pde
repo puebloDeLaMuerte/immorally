@@ -70,6 +70,13 @@ public User userFromFile( String filePath ) {
 }
 
 
+public void userToFile() {
+  String path = dataPath("user.txt");
+  String[] s = { user.username, user.password };
+  saveStrings(path,s);
+}
+
+
 boolean isUserExistsCallPending = false;
 boolean currentUserNameExists = false;
 

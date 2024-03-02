@@ -8,3 +8,4 @@ windows-amd64
 *project_files*
 *project_files/*
 *.asd
+data/user.txt

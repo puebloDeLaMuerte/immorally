@@ -96,7 +96,7 @@ public class CheckpointManager {
 
   public String getBestTime() {
 
-    if( sessionBestLapTime == maxLapTime ) return "--:--:--";
+    if( sessionBestLapTime == maxLapTime ) return "-- : -- : --";
     
     long totalSeconds = (long)sessionBestLapTime / 1000l;
     long milli = (long)sessionBestLapTime % 1000l;
@@ -107,7 +107,7 @@ public class CheckpointManager {
   
   public String getTimeElapsed() {
     
-    if( checkpoints == null || checkpoints.size() == 0 ) return "--:--:--";
+    if( checkpoints == null || checkpoints.size() == 0 ) return "-- : -- : --";
     
     Checkpoint c = checkpoints.get(0);
     long t = (long)(millis()-c.checkTime);

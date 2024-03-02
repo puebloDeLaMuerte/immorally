@@ -168,7 +168,7 @@ void drawUI() {
   text("#"+cpm.highscores.currentHotlapWorldRank, 685, gsecond);
 
   fill(palette.darkGlow);
-  text("median:", width/2 + 200, gfirst);
+  text("median:", width/2 + 155, gfirst);
   if( cpm.displaySessionMedianTimeAsAbsolute ) {
     fill(palette.personalBest);
   } else if( cpm.displaySessionMedianTimeAsNew ) {
@@ -176,7 +176,16 @@ void drawUI() {
   } else {
     fill(palette.mainColorSecondary);
   }
-  text(cpm.getMedianTime(), width/2 + 200, gsecond);
+  text(cpm.getMedianTime(), width/2 + 155, gsecond);
+  
+  fill(palette.mainColorPrimary);
+  text("123", width/2+380, gfirst);
+  
+  fill(palette.darkGlow);
+  text("lap consistency", width/2+440, gfirst);
+
+  fill(palette.mainColorSecondary);
+  text("-- : -- : ---", width/2 + 380, gsecond);
 
   // draw lap nr
   fill(palette.darkGlow);
@@ -190,24 +199,27 @@ void drawUI() {
   //text(timeString, width/2-textWidth(timeString)/2, gsecond);
 
   fill(palette.darkGlow);
-  text("tires:", width-200, gfirst);
+  text("tires:", width-170, gfirst);
   if ( car.tyreTempPenalty > 0.3 ) {
-    if ( car.tyreTempPenalty > 0.8 && frameCount % 20 < 10) {
+    
+    if( car.tyreTempPenalty < 0.6 ) {
+      fill(palette.mainColorSecondary);
+    } else if ( car.tyreTempPenalty > 0.9 && frameCount % 20 < 10) {
       fill(0);
     } else {
       fill(255);
     }
-    text("hot", width-200, gsecond);
+    text("hot", width-170, gsecond);
   } else if (car.tyreTempPenalty < -0.3) {
     if ( car.tyreTempPenalty < -0.8 && frameCount % 20 < 10) {
       fill(0);
     } else {
       fill(palette.mainColorPrimary);
     }
-    text("cold", width-200, gsecond);
+    text("cold", width-170, gsecond);
   } else {
     fill(palette.mainColorSecondary);
-    text("optimal", width-200, gsecond);
+    text("optimal", width-170, gsecond);
   }
   popStyle();
   

@@ -43,10 +43,10 @@ public class Highscores {
   public String getPreviousBestTime() {
 
     if( previousBestLapTime == -1 ) {
-      return "--:--:--";
+      return "-- : -- : --";
     }
     if( previousBestLapTime == (int)maxLapTime ) {
-      return "--:--:--"; //<>//
+      return "-- : -- : --"; //<>//
     }
     
     long totalSeconds = (long)previousBestLapTime / 1000l;

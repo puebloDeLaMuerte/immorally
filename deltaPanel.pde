@@ -63,10 +63,10 @@ class DeltaPanel {
       head = "personal best";
     } else {
       if( isPositiveValue ) {
-        head = "slower";  
+        head = "slow";  
       }
       else {
-        head = "sesion best";
+        head = "session best";
       }
     }
     float xPos = width/2-textWidth(head)/2;

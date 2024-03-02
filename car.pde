@@ -63,7 +63,7 @@ public class Car {
   float tyreTempPenalty;
   
   float tyreCooldown = 0.006f;
-  float tyreCarcasseFollow = 0.0005; // how fast the tyre-carcasse temperature follows the tyre surface temp
+  float tyreCarcasseFollow = 0.00025;// 0.0005 // how fast the tyre-carcasse temperature follows the tyre surface temp
   
   float tyreTempMaxDisplay = 105;
   float tyreTempBaselineDisplay = 30;

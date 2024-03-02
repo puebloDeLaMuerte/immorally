@@ -137,12 +137,20 @@ void drawUI() {
   
   fill(palette.darkGlow);
   text("personal best:", 250, gfirst);
-  fill(palette.mainColorSecondary);
+  if( cpm.highscores.displayLapTimeAsNew) {
+    fill(palette.personalBest);
+  } else {
+    fill(palette.mainColorSecondary);
+  }
   text(cpm.highscores.getPreviousBestTime(), 250, gsecond);
 
   //fill(palette.darkGlow);
   //text("rank: ", 430, gfirst);
-  fill(palette.white);
+  if( cpm.highscores.displayRankAsNew() ) {
+    fill(palette.personalBest);
+  } else {
+    fill(palette.white);
+  }
   text("#"+cpm.highscores.previousHotlapWorldRank, 405, gsecond);
 
   fill(palette.darkGlow);

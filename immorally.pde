@@ -34,7 +34,7 @@ CheckpointManager cpm = new CheckpointManager();
 
 boolean setCheckpoints = false;
 
-int noiseMapSizeFactor = 20;
+int noiseMapSizeFactor = 40;
 
 ArrayList<String> trackFiles;
 int trackIndex = 0;
@@ -54,7 +54,7 @@ void settings() {
   //size(1800,1169);
   //fullScreen();
   fullScreen(P2D);
-  //fullScreen(JAVA2D);
+  //fullScreen(JAVA2D); // bad framerate!!
   //fullScreen(P3D);
   //pixelDensity(2);
   smooth();
@@ -102,7 +102,7 @@ void setup() {
 
 
   font = createFont("RacelineDemo", deltaPanel.size);
-  
+
   initAudioPriority();
   thread("initAudio");
 
@@ -127,17 +127,16 @@ void draw() {
   //println("frame");
   updateDelta();
 
-  if( !paused ) background(0);
+  if ( !paused ) background(0);
 
   switch(gameState) {
   case LOADING:
     loadingLoop();
     break;
   case RACE:
-    if( paused ) {
-      pausedMillis += deltaTime; 
-    }
-    else {
+    if ( paused ) {
+      pausedMillis += deltaTime;
+    } else {
       raceLoop();
     }
     break;
@@ -226,8 +225,8 @@ public void loadNextTrack(int delta) {
   if ( trackIndex >= trackFiles.size() ) trackIndex = 0;
   if ( trackIndex < 0 ) trackIndex = trackFiles.size()-1;
   loadTrack(trackIndex);
-  resetCar(); 
-  
+  resetCar();
+
   thread("receiveBestScore");
 }
 

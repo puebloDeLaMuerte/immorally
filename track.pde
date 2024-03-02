@@ -498,6 +498,7 @@ public class Tile {
   public void drawTile(PGraphics gr) {
 
     //shape.setFill(myColor);
+    
     shape.enableStyle();
     shape.fill(palette.black);
     shape.stroke(palette.brightBlack);
@@ -509,8 +510,15 @@ public class Tile {
   public void drawMouseOver() {
     if ( !isMouseOver ) return;
     pushStyle();
-    stroke( palette.mainColorPrimary );
+    
+    //stroke( palette.mainColorPrimary );
+    //noFill();
+    
+    noStroke();
+    fill(red(palette.darkGlow), green(palette.darkGlow), blue(palette.darkGlow), 40);
+      
     shape(shape);
+    
     popStyle();
   }
 

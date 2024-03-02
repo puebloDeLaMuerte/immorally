@@ -19,7 +19,7 @@ public void userLoginLoop() {
   text(t, width/2-textWidth(t)/2, height/2 + 60);
 
   if ( user == null && userInputString == null ) {
-    user = userFromFile( dataPath("user.txt") ); //<>//
+    user = userFromFile( dataPath("user.txt") );
     userInputString = user.username;
     passInputString = user.password;
     if( userInputString != null && userInputString.length() > 0 && (passInputString == null || passInputString.length() == 0) ) {

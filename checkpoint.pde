@@ -45,11 +45,11 @@ public class CheckpointManager {
     
     if( checkpoints == null || checkpoints.size() == 0 ) return 1;
     
-    int prevInt = 0; //<>//
+    int prevInt = 0;
     int newInt = 0;
     
     while( newInt == prevInt ) {
-      prevInt = newInt; //<>//
+      prevInt = newInt;
       newInt ++;
       for( Checkpoint cp : checkpoints ) {
         if( cp.getCheckpointData() == newInt ) {
@@ -196,6 +196,8 @@ public class CheckpointManager {
     }
     if( invalidateLap ) allchecked = false;
     
+    highscores.newLap();
+    
     long thisLapTime = checkpoints.get(0).secondCheckTime - checkpoints.get(0).checkTime - pausedMillis;
     lapCount++;
     pausedMillis = 0;
@@ -239,7 +241,9 @@ public class CheckpointManager {
     
     // calculate isPersonalBest
 
+    boolean isSessionBest = false;
     boolean isPersonalBest = false;
+    
     if ( thisLap.getLapTimeAsDouble() < getCurrentBestLapTimeAsDouble() ) {
       sessionBestLapTime = thisLapTime;
       currentBestLapTotalNr = thisLap.getTotalLapNr();
@@ -247,9 +251,14 @@ public class CheckpointManager {
       thread("sendHighscore");
       
       playYeah();
+      isSessionBest = true;
+    }
+    thisLap.setIsPersonalBestThisSession(isSessionBest);
+
+    if( thisLapTime < highscores.previousBestLapTime ) {
+      highscores.setNewPreviousLapTime((int)thisLapTime);
       isPersonalBest = true;
     }
-    thisLap.setIsPersonalBestThisSession(isPersonalBest);
 
     thisLap.finalize();
 
@@ -552,6 +561,15 @@ public class PowerDownCheckpoint extends Checkpoint {
   
   @Override
   protected void drawCheckpoint() {
+    
+    // drawing checkpoints double to get a "smoothing" effect takes too much off of the framerate
+    /*
+    stroke( red(palette.powerDownHighlight), green(palette.powerDownHighlight), blue(palette.powerDownHighlight), 40 );
+    strokeWeight(6);
+    //noFill();
+    shape(tile.shape);
+    */
+    
     stroke( palette.powerDownHighlight );
     if( car != null ) {
       strokeWeight(3);

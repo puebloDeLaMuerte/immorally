@@ -4,7 +4,39 @@ public class Highscores {
   
   int previousHotlapWorldRank = -1;
   int previousBestLapTime = -1;
+  
+  private boolean displayLapTimeAsNew = false;
+  private boolean displayRankAsNew = false;
+  
+  public void newLap() {
+    displayLapTimeAsNew = false;
+    displayRankAsNew = false;
+  }
 
+  public void setNewPreviousRank( int rank ) {
+    
+    if( rank < previousHotlapWorldRank ) {
+      displayRankAsNew = true;    
+      previousHotlapWorldRank = rank;
+    }
+  }
+  
+  public void setNewPreviousLapTime( int laptime ) {
+    
+    if( laptime < previousBestLapTime ) {
+      displayLapTimeAsNew = true;
+      previousBestLapTime = laptime;
+    }
+  }
+  
+  public boolean displayLapTimeAsNew() {
+    return displayLapTimeAsNew;
+  }
+  
+  public boolean displayRankAsNew() {
+    return displayRankAsNew;
+  }
+  
 
   public String getPreviousBestTime() {
 
@@ -53,6 +85,7 @@ void sendHighscore() {
   if (matcher.find()) {
     int rank = Integer.parseInt(matcher.group(1)); // Group 1 contains the first set of parentheses in the regex, which is the digits part
     cpm.highscores.currentHotlapWorldRank = rank;
+    cpm.highscores.setNewPreviousRank(rank);
     println("string: " + matcher.group(1));
     System.out.println("Rank: " + rank);
   } else {
@@ -92,8 +125,13 @@ void receiveBestScore() {
   if (!"NTR,NR".equals(response)) { // Check if it's not the default failure response
     try {
       results[0] = Integer.parseInt(parts[0]); // Parse best time
-      results[1] = Integer.parseInt(parts[1]); // Parse world rank  
+      results[1] = Integer.parseInt(parts[1]); // Parse world rank 
+      
       println("best time: " + results[0] + " rank: " + results[1]);
+      
+      cpm.highscores.previousBestLapTime = results[0];
+      cpm.highscores.previousHotlapWorldRank = results[1];
+      
     } catch(Exception e) {
       println("error parsing previous highscores result: " + response);
     }

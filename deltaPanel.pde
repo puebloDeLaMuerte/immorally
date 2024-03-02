@@ -9,8 +9,8 @@ class DeltaPanel {
   String delta = "";
   float size = 250;
   //boolean isPositiveValue;
-  boolean isAbsoluteBest;
-  
+  boolean isPersonalBest;
+  boolean isPositiveValue;
   
   public DeltaPanel(color c) {
     fillColor = c;
@@ -18,13 +18,13 @@ class DeltaPanel {
   
   
   
-  public void showPanel(String deltaToBest, String deltaToMedian, boolean isPositiveValue, boolean isAbsoluteBest, boolean showMedian) {
+  public void showPanel(String deltaToBest, String deltaToMedian, boolean isPositiveValue, boolean isPersonalBest, boolean showMedian) {
     
-    //this.isPositiveValue = isPositiveValue;
-    this.isAbsoluteBest = isAbsoluteBest;
+    this.isPositiveValue = isPositiveValue;
+    this.isPersonalBest = isPersonalBest;
     delta = "";
-    if( isAbsoluteBest ) {
-      fillColor = palette.best;
+    if( isPersonalBest ) {
+      fillColor = palette.personalBest;
       delta = "-"+deltaToBest;
     }
     else if( isPositiveValue ) {
@@ -33,7 +33,7 @@ class DeltaPanel {
       } else {
         delta = "+" + deltaToBest;
       }
-      fillColor = color(175,0,0);
+      fillColor = palette.best;
     }
     else {
       if( showMedian ) {
@@ -59,10 +59,15 @@ class DeltaPanel {
     
     textSize(size/4);
     String head;
-    if( isAbsoluteBest ) {
+    if( isPersonalBest ) {
       head = "personal best";
     } else {
-      head = "slower";
+      if( isPositiveValue ) {
+        head = "slower";  
+      }
+      else {
+        head = "sesion best";
+      }
     }
     float xPos = width/2-textWidth(head)/2;
     float yPos = height/2-size/2 - size/4;

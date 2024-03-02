@@ -18,7 +18,8 @@ public class Palette {
   
   int destruction = color(200,0,20);
   
-  int best = #8f19c1;
+  int best = color(175,0,0);
+  int personalBest = #8f19c1;
   
   int geilOrange = color(200,200,50);
   

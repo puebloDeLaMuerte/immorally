@@ -10,9 +10,14 @@ public class CheckpointManager {
   
   long sessionBestLapTime = maxLapTime;
   int currentBestLapTotalNr = -1;
+  boolean displaySessionBestTimeAsNew = false;
+  boolean displaySessionBestRankAsNew = false;
+  boolean displaySessionMedianTimeAsNew = false;
+  boolean displaySessionMedianTimeAsAbsolute = false;
   
   long medianTime = 0;
   long lastMedianTime = 0;
+  long sessionBestMedianTime = maxLapTime;
   
   long currentDeltaToBest;
   long currentDeltaToMedian;
@@ -196,6 +201,10 @@ public class CheckpointManager {
     if( invalidateLap ) allchecked = false;
     
     highscores.newLap();
+    displaySessionBestTimeAsNew = false;
+    displaySessionBestRankAsNew = false;
+    displaySessionMedianTimeAsNew = false;
+    displaySessionMedianTimeAsAbsolute = false;
     
     long thisLapTime = checkpoints.get(0).secondCheckTime - checkpoints.get(0).checkTime - pausedMillis;
     lapCount++;
@@ -238,6 +247,14 @@ public class CheckpointManager {
     currentDeltaToMedian = medianTime - lastMedianTime;
     thisLap.medianTime = new Long( medianTime );
     
+    if( medianTime < lastMedianTime ) {
+      displaySessionMedianTimeAsNew = true;
+    }
+    if( medianTime < sessionBestMedianTime ) {
+      sessionBestMedianTime = medianTime;
+      displaySessionMedianTimeAsAbsolute = true;
+    }
+    
     // calculate isPersonalBest
 
     boolean isSessionBest = false;
@@ -251,6 +268,7 @@ public class CheckpointManager {
       
       playYeah();
       isSessionBest = true;
+      displaySessionBestTimeAsNew = true;
     }
     thisLap.setIsPersonalBestThisSession(isSessionBest);
 

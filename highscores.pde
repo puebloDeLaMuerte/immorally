@@ -93,6 +93,9 @@ void sendHighscore() {
     int rank = Integer.parseInt(matcher.group(1)); // Group 1 contains the first set of parentheses in the regex, which is the digits part
     cpm.highscores.currentHotlapWorldRank = rank;
     cpm.highscores.setNewPreviousRank(rank);
+    if( rank < cpm.highscores.currentHotlapWorldRank ) {
+      cpm.displaySessionBestRankAsNew = true;
+    }
     println("string: " + matcher.group(1));
     System.out.println("Rank: " + rank);
   } else {

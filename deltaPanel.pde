@@ -33,7 +33,7 @@ class DeltaPanel {
       } else {
         delta = "+" + deltaToBest;
       }
-      fillColor = palette.best;
+      fillColor = palette.worst;
     }
     else {
       if( showMedian ) {
@@ -41,7 +41,7 @@ class DeltaPanel {
       } else {
         delta = "-" + deltaToBest;
       }
-      fillColor = color(0,175,0);
+      fillColor = palette.best;
     }
     //delta += deltaToMedian;
     opacity = 200;

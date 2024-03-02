@@ -155,7 +155,11 @@ void drawUI() {
 
   fill(palette.darkGlow);
   text("session best:", 530, gfirst);
-  fill(palette.mainColorSecondary);
+  if( cpm.displaySessionBestTimeAsNew ) {
+    fill(palette.best);
+  } else {
+    fill(palette.mainColorPrimary);  
+  }
   text(cpm.getBestTime(), 530, gsecond);
 
   //fill(palette.darkGlow);
@@ -165,7 +169,13 @@ void drawUI() {
 
   fill(palette.darkGlow);
   text("median:", width/2 + 200, gfirst);
-  fill(palette.mainColorSecondary);
+  if( cpm.displaySessionMedianTimeAsAbsolute ) {
+    fill(palette.personalBest);
+  } else if( cpm.displaySessionMedianTimeAsNew ) {
+    fill(palette.best);
+  } else {
+    fill(palette.mainColorSecondary);
+  }
   text(cpm.getMedianTime(), width/2 + 200, gsecond);
 
   // draw lap nr

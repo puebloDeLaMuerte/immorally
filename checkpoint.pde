@@ -1,13 +1,12 @@
+long maxLapTime = 999999999999999999l;
+
 public class CheckpointManager {
 
   ArrayList<Checkpoint> checkpoints = new ArrayList();
   ArrayList<Checkpoint> specialCheckpoints = new ArrayList();
   ArrayList<Checkpoint> allCheckpoints = null;
 
-  long maxLapTime = 999999999999999999l;
-
-  ArrayList<Lap> allLaps = new ArrayList();
-  
+  ArrayList<Lap> allLaps = new ArrayList();  
   
   long sessionBestLapTime = maxLapTime;
   int currentBestLapTotalNr = -1;
@@ -255,7 +254,7 @@ public class CheckpointManager {
     }
     thisLap.setIsPersonalBestThisSession(isSessionBest);
 
-    if( thisLapTime < highscores.previousBestLapTime ) {
+    if( thisLapTime < highscores.previousBestLapTime || highscores.previousBestLapTime == -1) {
       highscores.setNewPreviousLapTime((int)thisLapTime);
       isPersonalBest = true;
     }

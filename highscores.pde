@@ -3,7 +3,7 @@ public class Highscores {
   int currentHotlapWorldRank = -1;
   
   int previousHotlapWorldRank = -1;
-  int previousBestLapTime = -1;
+  int previousBestLapTime = -1;// (int)maxLapTime;
   
   private boolean displayLapTimeAsNew = false;
   private boolean displayRankAsNew = false;
@@ -15,7 +15,7 @@ public class Highscores {
 
   public void setNewPreviousRank( int rank ) {
     
-    if( rank < previousHotlapWorldRank ) {
+    if( rank < previousHotlapWorldRank || previousHotlapWorldRank <= 0) {
       displayRankAsNew = true;    
       previousHotlapWorldRank = rank;
     }
@@ -23,9 +23,11 @@ public class Highscores {
   
   public void setNewPreviousLapTime( int laptime ) {
     
-    if( laptime < previousBestLapTime ) {
+    if( laptime < previousBestLapTime || previousBestLapTime <= 0 || previousBestLapTime == maxLapTime ) {
       displayLapTimeAsNew = true;
       previousBestLapTime = laptime;
+    } else {
+      println("not setting time: " + laptime + " maxLapTime: " + maxLapTime + " previousBestLapTime: " + previousBestLapTime);
     }
   }
   
@@ -40,7 +42,12 @@ public class Highscores {
 
   public String getPreviousBestTime() {
 
-    if( previousBestLapTime == cpm.maxLapTime || previousBestLapTime == -1 ) return "--:--:--";
+    if( previousBestLapTime == -1 ) {
+      return "--:--:--";
+    }
+    if( previousBestLapTime == (int)maxLapTime ) {
+      return "--:--:--"; //<>//
+    }
     
     long totalSeconds = (long)previousBestLapTime / 1000l;
     long milli = (long)previousBestLapTime % 1000l;

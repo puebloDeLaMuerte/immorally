@@ -41,6 +41,7 @@ public void verifyUser() {
     if (json != null && json.hasKey("token")) {
       println("session token received");
       user.sessionToken = json.getString("token");
+      userToFile();
     } else {
       println("login failed, no token received: " + response);
       user.sessionToken = null;

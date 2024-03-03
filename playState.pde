@@ -184,23 +184,37 @@ void drawUI() {
   text(cpm.getMedianTime(), width/2 + 144, gsecond);
   
   
-  fill(palette.darkGlow);
-  text("tier", width/2+390, gfirst);
+  TierScore ts = cpm.highscores.getLatestTierScore();
   
-  fill(palette.white);
-  text(cpm.highscores.lastReachedRankTierNr, width/2+390+ textWidth("tier "), gfirst);
+  if( ts != null ) {
   
-  fill(palette.darkGlow);
-  text(" ranking:", width/2+390+ textWidth("tier "+cpm.highscores.lastReachedRankTierNr), gfirst);
+    fill(palette.darkGlow);
+    text("tier", width/2+390, gfirst);
+    
+    fill(palette.white);
+    text(ts.getTier(), width/2+390+ textWidth("tier "), gfirst);
+    
+    fill(palette.darkGlow);
+    text(" ranking:", width/2+390+ textWidth("tier "+ts.getTier()), gfirst);
+    
+    //fill(palette.darkGlow);
+    //text("lap consistency", width/2+440, gfirst);
   
-  //fill(palette.darkGlow);
-  //text("lap consistency", width/2+440, gfirst);
-
-  fill(palette.mainColorSecondary);
-  text("-- : -- : ---", width/2 + 390, gsecond);
-  
-  fill(palette.white);
-  text("#n/a", width/2 + 530, gsecond);
+    if( ts.isNewRecord() ) {
+      fill(palette.personalBest);
+    } else {
+      fill(palette.mainColorSecondary);
+    }
+    text( cpm.timeAsDisplayString( ts.getMedianTime()), width/2 + 390, gsecond);
+    
+    
+    if( ts.isNewRecord() ) {
+      fill(palette.personalBest);
+    } else {
+      fill(palette.white);  
+    }
+    text("#"+ts.getRank(), width/2 + 545, gsecond);
+  }
 
   // draw lap nr
   fill(palette.darkGlow);

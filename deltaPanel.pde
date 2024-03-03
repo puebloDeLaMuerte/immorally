@@ -29,7 +29,7 @@ class DeltaPanel {
     }
     else if( isPositiveValue ) {
       if( showMedian ) {
-        delta = "+" + deltaToMedian;  
+        delta = "+" + "MEDIAN";//deltaToMedian;  
       } else {
         delta = "+" + deltaToBest;
       }
@@ -37,7 +37,7 @@ class DeltaPanel {
     }
     else {
       if( showMedian ) {
-        delta = "-" + deltaToMedian;  
+        delta = "-" + "MEDIAN";//deltaToMedian;  
       } else {
         delta = "-" + deltaToBest;
       }

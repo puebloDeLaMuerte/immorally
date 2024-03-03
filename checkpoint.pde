@@ -10,6 +10,7 @@ public class CheckpointManager {
   
   long sessionBestLapTime = maxLapTime;
   int currentBestLapTotalNr = -1;
+  
   boolean displaySessionBestTimeAsNew = false;
   boolean displaySessionBestRankAsNew = false;
   boolean displaySessionMedianTimeAsNew = false;
@@ -202,6 +203,7 @@ public class CheckpointManager {
     
     highscores.newLap();
     displaySessionBestTimeAsNew = false;
+    println("pre: " + displaySessionBestRankAsNew + " setting to FALSE now");
     displaySessionBestRankAsNew = false;
     displaySessionMedianTimeAsNew = false;
     displaySessionMedianTimeAsAbsolute = false;

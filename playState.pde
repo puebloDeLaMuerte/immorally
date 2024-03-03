@@ -164,11 +164,16 @@ void drawUI() {
 
   //fill(palette.darkGlow);
   //text("rank: ", 710, gfirst);
-  fill(palette.white);
+  if( cpm.displaySessionBestRankAsNew ) {
+    fill(palette.best);
+  } else {
+    fill(palette.white);
+  }
+  
   text("#"+cpm.highscores.currentHotlapWorldRank, 685, gsecond);
 
   fill(palette.darkGlow);
-  text("median:", width/2 + 155, gfirst);
+  text("average time:", width/2 + 144, gfirst);
   if( cpm.displaySessionMedianTimeAsAbsolute ) {
     fill(palette.personalBest);
   } else if( cpm.displaySessionMedianTimeAsNew ) {
@@ -176,16 +181,26 @@ void drawUI() {
   } else {
     fill(palette.mainColorSecondary);
   }
-  text(cpm.getMedianTime(), width/2 + 155, gsecond);
+  text(cpm.getMedianTime(), width/2 + 144, gsecond);
   
-  fill(palette.mainColorPrimary);
-  text("123", width/2+380, gfirst);
   
   fill(palette.darkGlow);
-  text("lap consistency", width/2+440, gfirst);
+  text("tier", width/2+390, gfirst);
+  
+  fill(palette.white);
+  text(cpm.highscores.lastReachedRankTierNr, width/2+390+ textWidth("tier "), gfirst);
+  
+  fill(palette.darkGlow);
+  text(" ranking:", width/2+390+ textWidth("tier "+cpm.highscores.lastReachedRankTierNr), gfirst);
+  
+  //fill(palette.darkGlow);
+  //text("lap consistency", width/2+440, gfirst);
 
   fill(palette.mainColorSecondary);
-  text("-- : -- : ---", width/2 + 380, gsecond);
+  text("-- : -- : ---", width/2 + 390, gsecond);
+  
+  fill(palette.white);
+  text("#n/a", width/2 + 530, gsecond);
 
   // draw lap nr
   fill(palette.darkGlow);

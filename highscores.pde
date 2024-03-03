@@ -5,6 +5,10 @@ public class Highscores {
   int previousHotlapWorldRank = -1;
   int previousBestLapTime = -1;// (int)maxLapTime;
   
+  int lastReachedRankTierNr = -1;
+  int lastReachedTierRank = -1;
+  int lastReachedTierTime = -1;
+  
   private boolean displayLapTimeAsNew = false;
   private boolean displayRankAsNew = false;
   
@@ -91,11 +95,14 @@ void sendHighscore() {
 
   if (matcher.find()) {
     int rank = Integer.parseInt(matcher.group(1)); // Group 1 contains the first set of parentheses in the regex, which is the digits part
-    cpm.highscores.currentHotlapWorldRank = rank;
-    cpm.highscores.setNewPreviousRank(rank);
+    println("new rank: " + rank + " currentHotlapRank: " + cpm.highscores.currentHotlapWorldRank);
     if( rank < cpm.highscores.currentHotlapWorldRank ) {
       cpm.displaySessionBestRankAsNew = true;
+      println("display as NEW");
     }
+    cpm.highscores.currentHotlapWorldRank = rank;
+    cpm.highscores.setNewPreviousRank(rank);
+    
     println("string: " + matcher.group(1));
     System.out.println("Rank: " + rank);
   } else {

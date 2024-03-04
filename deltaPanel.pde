@@ -20,6 +20,9 @@ class DeltaPanel {
   
   public void showPanel(String deltaToBest, String deltaToMedian, boolean isPositiveValue, boolean isPersonalBest, boolean showMedian) {
     
+    deltaToBest = deltaToBest.replace(" ", "");
+    deltaToMedian = deltaToMedian.replace(" ", "");
+    
     this.isPositiveValue = isPositiveValue;
     this.isPersonalBest = isPersonalBest;
     delta = "";

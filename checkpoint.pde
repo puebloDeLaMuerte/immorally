@@ -314,6 +314,11 @@ public class CheckpointManager {
     if( t == -1l ) {
       return "-- : -- : ---";
     }
+    if( t == maxLapTime ) {
+      return "-- : -- : ---";
+    }
+    
+    if( t < 0 ) t *= -1l;
     
     long totalSeconds = t / 1000l;
     long milli = t % 1000;

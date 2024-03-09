@@ -32,6 +32,9 @@ public class CheckpointManager {
   int[] tierLaps = {5, 10, 20, 40, 80, 160};
   int tierMultiple = 80;
 
+  LapTracker lapTracker;
+  LapTracker ghostCarLapTracker;
+  
   public void reset() {
     checkpoints = new ArrayList();
     specialCheckpoints = new ArrayList();
@@ -99,8 +102,18 @@ public class CheckpointManager {
 
     return timeAsDisplayString(sessionBestLapTime);
   }
+  
+  
+  
+  public int getTimeElapsedAsInt() {
+    if ( checkpoints == null || checkpoints.size() == 0 ) return -1;
+    Checkpoint c = checkpoints.get(0);
+    return millis() - (int)c.checkTime - pausedMillis;
+  }
 
-  public String getTimeElapsed() {
+
+
+  public String getTimeElapsedAsString() {
 
     if ( checkpoints == null || checkpoints.size() == 0 ) return timeAsDisplayString(-1);
 
@@ -204,13 +217,16 @@ public class CheckpointManager {
       for ( Checkpoint cp : checkpoints ) {
         cp.newLap();
       }
+      this.lapTracker = new LapTracker();
       return;
     }
     validLapCount++;
 
     thisLap.setIsValid(true);
-    thisLap.setValidLapNr(validLapCount);
-
+    thisLap.setValidLapNr(validLapCount);    
+    thisLap.setLapTracker(lapTracker);
+    this.lapTracker = new LapTracker();
+    
     lastMedianTime = medianTime;
 
     currentDeltaToBest = thisLapTime - sessionBestLapTime;
@@ -241,7 +257,7 @@ public class CheckpointManager {
     boolean isPersonalBest = false;
 
     if ( isTierLap(validLapCount) ) {
-      println("TIIIIIIIIIIER LAP: " + validLapCount);
+      //println("TIIIIIIIIIIER LAP: " + validLapCount);
       TierScore ts = highscores.getLatestTierScore();
       if( ts == null || ts.tier != validLapCount) {
         highscores.tierScores.add(new TierScore(validLapCount,(int)medianTime));
@@ -257,7 +273,9 @@ public class CheckpointManager {
       currentBestLapTotalNr = thisLap.getTotalLapNr();
 
       thread("sendHighscore");
-
+      
+      ghostCarLapTracker = thisLap.getLapTracker();
+      
       playYeah();
       isSessionBest = true;
       displaySessionBestTimeAsNew = true;
@@ -292,7 +310,7 @@ public class CheckpointManager {
     return isInSequence(lapNr);
   }
 
-
+  // sequencially calculate if this lap is a valid multiple of the tier-lap array...
   private boolean isInSequence(int num) {
 
     int start = tierMultiple;
@@ -330,6 +348,36 @@ public class CheckpointManager {
 
 
 
+
+  public void handleLapTracker() {
+    
+    if( lapTracker != null ) {
+      if( frameCount % 20 == 0 ) {
+        lapTracker.addRecord( getTimeElapsedAsInt(), new PVector(car.pos.x, car.pos.y), car.rotation);  
+      }
+        
+    }
+    
+    if( drawGhostCar && ghostCarLapTracker != null ) {
+      PositionRecord pr = ghostCarLapTracker.getRecord( getTimeElapsedAsInt() );
+      if( pr != null ) {
+        pushStyle();
+        pushMatrix();
+        noFill();
+        stroke(palette.darkGlow);
+        translate(pr.position.x, pr.position.y);
+        rotate(pr.rotation);
+        line(-25,-10,20,0);
+        line(-25, 10,20,0);
+        popMatrix();
+        popStyle();
+      }
+    }
+  }
+
+
+
+
   public void drawCheckpoints() {
 
     for ( Checkpoint cp : checkpoints ) {
@@ -339,6 +387,8 @@ public class CheckpointManager {
       scp.drawCheckpoint();
     }
   }
+
+
 
 
   public void sortCheckpoints() {
@@ -356,6 +406,9 @@ public class CheckpointManager {
 
 
 
+
+
+
 public class Lap {
 
   private boolean isFinalized = false;
@@ -367,6 +420,7 @@ public class Lap {
   private Long bestTime;
   private int totalLapNr;
   private int validLapNr;
+  private LapTracker lapTracker;
 
   public Lap(Long lapTime, int totalLapNr, boolean isValid) {
     this.isValid = isValid;
@@ -376,6 +430,14 @@ public class Lap {
 
   public void finalize() {
     isFinalized = true;
+  }
+
+  public void setLapTracker(LapTracker lt) {
+    this.lapTracker = lt;
+  }
+
+  public LapTracker getLapTracker() {
+    return lapTracker;
   }
 
   public void setValidLapNr(int vlnr) {

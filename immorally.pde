@@ -41,6 +41,7 @@ int trackIndex = 0;
 
 boolean drawTyreInfo = false;
 boolean drawFrameRate = false;
+boolean drawGhostCar = true;
 
 boolean paused = false;
 int pausedMillis = 0;

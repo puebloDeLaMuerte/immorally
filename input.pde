@@ -19,6 +19,8 @@ boolean newTrackKeyPressed;
 
 char drawCheckpointsKey = 'c';
 
+char drawGhostCarKey = 'g';
+
 char saveTrackKey = 'S';
 
 char loadTrackKey = 'l';
@@ -84,6 +86,8 @@ void keyPressed(KeyEvent e) {
   if( k == loadPrevTrackKey ) loadNextTrack(-1);
   
   if( k == printDebugInfoKey ) printDebugInfo();
+  
+  if( k == drawGhostCarKey ) drawGhostCar = !drawGhostCar;
   
   if( k == '1' ) frameRate(120);
   if( k == '2' ) frameRate(60);

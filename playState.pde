@@ -49,6 +49,8 @@ public void raceLoop() {
   popStyle();
   cpm.drawCheckpoints();
 
+  cpm.handleLapTracker();
+
   panCarSounds();
   //playEngine(car.getSpeed());
   playElectric(car.getSpeed());
@@ -223,7 +225,7 @@ void drawUI() {
   text( cpm.validLapCount, (width/2) /*- textWidth(""+cpm.validLapCount)*/, gfirst);
 
   // draw lapTime
-  String timeString = cpm.getTimeElapsed();
+  String timeString = cpm.getTimeElapsedAsString();
   drawLaptime( (width/2) - 90, gsecond, timeString);
   //text(timeString, width/2-textWidth(timeString)/2, gsecond);
 
